@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GlossaryGrid from "../../components/GlossaryGrid.tsx";
+import { GLOSSARY, GLOSSARY_CATEGORIES } from "../../data/glossary";
+---
+
+<BaseLayout title="Concepts & Glossary · O-RAN Spec Explorer">
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold tracking-tight">기본 개념 & 용어집</h1>
+    <p class="mt-2 text-ink-600 dark:text-ink-300 max-w-3xl leading-relaxed">
+      Section Type/Extension을 보기 전에 알아야 할 {GLOSSARY.length}개 핵심 용어를 비유 중심으로 정리했습니다.
+      각 카드를 클릭하면 자세한 설명과 관련 용어로 이동할 수 있어요. 처음 오셨다면 <b>O-DU</b>, <b>O-RU</b>, <b>UE</b>, <b>PRB</b>, <b>Beamforming</b>, <b>C-Plane</b>부터 보세요.
+    </p>
+  </header>
+  <GlossaryGrid client:load />
+</BaseLayout>

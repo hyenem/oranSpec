@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ExtensionCard from "../../components/ExtensionCard.astro";
+import { SECTION_EXTENSIONS } from "../../data/curated";
+const groups = [
+  { key: "beamforming", label: "빔포밍" },
+  { key: "compression", label: "압축" },
+  { key: "prb-allocation", label: "PRB 할당" },
+  { key: "ueId", label: "UE 단위" },
+  { key: "antenna", label: "안테나" },
+  { key: "feedback", label: "피드백" },
+  { key: "control", label: "컨트롤" },
+];
+---
+
+<BaseLayout title="Section Extensions · O-RAN Spec Explorer">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight">Section Extensions (SE 1~30)</h1>
+    <p class="mt-2 text-ink-600 dark:text-ink-300 max-w-3xl">
+      Section에 덧붙어서 빔포밍 가중치(SE 1, 11), 압축 파라미터(SE 4, 5, 23), PRB 할당(SE 6, 12, 13),
+      UE 단위 제어(SE 14~18), 채널 정보 보조(SE 27, 28), ACK 요청(SE 22) 등을 추가로 전달합니다.
+      카드를 카테고리별로 묶어 표시했습니다.
+    </p>
+  </header>
+
+  {groups.map((g) => {
+    const items = SECTION_EXTENSIONS.filter((s) => s.affects.includes(g.key as any));
+    if (items.length === 0) return null;
+    return (
+      <section class="mb-10">
+        <h2 class="text-xl font-semibold mb-3">{g.label}</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((se) => <ExtensionCard se={se} />)}
+        </div>
+      </section>
+    );
+  })}
+</BaseLayout>

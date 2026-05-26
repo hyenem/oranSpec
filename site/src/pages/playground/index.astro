@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Playground from "../../components/Playground.tsx";
+---
+
+<BaseLayout title="Playground · O-RAN Spec Explorer">
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold tracking-tight">Playground</h1>
+    <p class="mt-2 text-ink-600 dark:text-ink-300 max-w-3xl">
+      Section Type을 하나 고르고, 그 위에 붙일 Extension들을 토글하면 네 가지 뷰가 동시에 반응합니다.
+      비트 레이아웃은 메시지가 어떻게 직렬화되는지, RB 그리드는 어떤 자원을 차지하는지,
+      빔포밍 뷰는 안테나 패턴에 어떤 영향이 가는지, 시퀀스는 DU↔RU↔UE의 대화가 어떻게 흘러가는지 보여줍니다.
+    </p>
+  </header>
+  <Playground client:load />
+</BaseLayout>

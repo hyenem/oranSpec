@@ -1,0 +1,28 @@
+---
+import type { SectionExtensionMeta } from "../data/curated";
+interface Props {
+  se: SectionExtensionMeta;
+}
+const { se } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<a
+  href={`${base}extensions/${se.id}/`}
+  class="block rounded-xl border border-ink-200 dark:border-ink-700 p-4 bg-white dark:bg-ink-900 hover:shadow-md hover:-translate-y-0.5 transition group"
+>
+  <div class="flex items-center gap-2 mb-2">
+    <span class="w-2.5 h-2.5 rounded-full" style={`background:${se.color}`}></span>
+    <span class="font-mono text-xs px-1.5 py-0.5 rounded" style={`background:${se.color}1f;color:${se.color}`}>SE{se.id}</span>
+  </div>
+  <h3 class="font-semibold leading-snug group-hover:text-brand-600">{se.name}</h3>
+  <p class="text-sm mt-2 text-ink-600 dark:text-ink-300 line-clamp-3">{se.shortPurpose}</p>
+  <div class="mt-3 flex flex-wrap gap-1">
+    {se.affects.map((t) => (
+      <span class="text-[10px] font-mono px-1.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-500">{t}</span>
+    ))}
+  </div>
+  <div class="mt-2 text-[10px] text-ink-500 font-mono">
+    applies: {se.appliesToSectionTypes.map((id) => `ST${id}`).join(", ")}
+  </div>
+</a>

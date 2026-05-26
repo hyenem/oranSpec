@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import fields from "../../data/fields.json";
+import FieldSearch from "../../components/FieldSearch.tsx";
+const list = fields as Array<{ id: string; name: string; longName: string; category: string; headingNumber: string; summary?: string }>;
+---
+
+<BaseLayout title="Fields · O-RAN Spec Explorer">
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold tracking-tight">Common Fields</h1>
+    <p class="mt-2 text-ink-600 dark:text-ink-300 max-w-3xl">
+      C-Plane Section의 공통 필드(7.5.2)와 Section별 필드(7.5.3) {list.length}개. 이름·설명·요약으로 검색하세요.
+    </p>
+  </header>
+  <FieldSearch fields={list} client:load />
+</BaseLayout>

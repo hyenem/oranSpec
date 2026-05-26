@@ -1,0 +1,900 @@
+{
+  "sectionTypes": [
+    {
+      "id": "0",
+      "sectionType": 0,
+      "title": "Section Type 0 elements",
+      "shortTitle": "Section Type 0 elements",
+      "reserved": false,
+      "summary": "Section Type 0 is used for indicating idle or guard periods from O-DU to\nO-RU; see Table 7.4.2‑1\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **filterIndex** (filter index) field: 4 bits.\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.\n\n- **slotId** (slot identifier) field: 6 bits.\n\n- **startSymbolId** (start symbol id) field: 6 bits.",
+      "headingNumber": "7.4.2"
+    },
+    {
+      "id": "1",
+      "sectionType": 1,
+      "title": "Section Type 1 elements",
+      "shortTitle": "Section Type 1 elements",
+      "reserved": false,
+      "summary": "Section Type 1 is used for most of the Downlink and Uplink radio\nchannels - some channels especially PRACH and mixed-numerology channels\nmay need more information elements contained in other Section Types.\nHowever, if Section Type 1 is used for PRACH channel, it should be\nprocessed in the same manner as a non-PRACH channel is processed in\nO-RU; see Table 7.4.3‑1\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).",
+      "headingNumber": "7.4.3"
+    },
+    {
+      "id": "2",
+      "sectionType": 2,
+      "title": "reserved (reserved for future use)",
+      "shortTitle": "reserved (reserved for future use)",
+      "reserved": true,
+      "summary": "",
+      "headingNumber": "7.4.4"
+    },
+    {
+      "id": "3",
+      "sectionType": 3,
+      "title": "Section Type 3 elements",
+      "shortTitle": "Section Type 3 elements",
+      "reserved": false,
+      "summary": "Section Type 3 is used for PRACH and mixed-numerology channels; see\nTable 7.4.5‑1:\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **filterIndex** (filter index) field: 4 bits.\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.\n\n- **slotId** (slot identifier) field: 6 bits.\n\n- **startSymbolId** (start symbol identifier) field: 6 bits.",
+      "headingNumber": "7.4.5"
+    },
+    {
+      "id": "4",
+      "sectionType": 4,
+      "title": "Section Type 4 elements",
+      "shortTitle": "Section Type 4 elements",
+      "reserved": false,
+      "summary": "Section Type 4 (Slot level configuration); see Table 7.4.6‑1, Table\n7.4.6-2:\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **scs** (filter index) field: 4 bits.\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.\n\n- **slotId** (slot identifier) field: 6 bits.\n\n- **startSymbolId** (start symbol identifier) field: 6 bits.",
+      "headingNumber": "7.4.6"
+    },
+    {
+      "id": "5",
+      "sectionType": 5,
+      "title": "Section Type 5 elements",
+      "shortTitle": "Section Type 5 elements",
+      "reserved": false,
+      "summary": "Section Type 5 is used for UE scheduling information; see Table 7.4.7‑1:\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **filterIndex** (filter index) field: 4 bits.\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.\n\n- **slotId** (slot identifier) field: 6 bits.\n\n- **startSymbolId** (start symbol identifier) field: 6 bits.",
+      "headingNumber": "7.4.7"
+    },
+    {
+      "id": "6",
+      "sectionType": 6,
+      "title": "Section Type 6 elements",
+      "shortTitle": "Section Type 6 elements",
+      "reserved": false,
+      "summary": "Section Type 6 is used for sending channel information for a specific\nueId; see Table 7.4.8‑1:\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **filterIndex** (filter index) field: 4 bits.\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.\n\n- **slotId** (slot identifier) field: 6 bits.\n\n- **startSymbolId** (start symbol identifier) field: 6 bits.",
+      "headingNumber": "7.4.8"
+    },
+    {
+      "id": "7",
+      "sectionType": 7,
+      "title": "Section Type 7 elements",
+      "shortTitle": "Section Type 7 elements",
+      "reserved": false,
+      "summary": "Section Type 7 is used to support LAA; see Table 7.4.9‑1:\n\n- Common Header Fields:\n\n- dataDirection (data direction (gNB Tx/Rx)) field: 1 bit.\n\n- value = 1 shall be set\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **reserved** (reserved for future use) field: 4 bits.\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.\n\n- **slotId** (slot identifier) field: 6 bits.\n\n- **reserved** (reserved for future use) field: 14 bits.",
+      "headingNumber": "7.4.9"
+    },
+    {
+      "id": "8",
+      "sectionType": 8,
+      "title": "Section Type 8 elements",
+      "shortTitle": "Section Type 8 elements",
+      "reserved": false,
+      "summary": "Section Type 8 is used for sending ACK/NACK feedbacks from the O-RU to\nthe O-DU; see Table 7.4.10‑1:\n\n- Common Header Fields\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit.\n\n- **payloadVersion** (payload version) field: 3 bits\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format)\n\n- **scs** (sub-carrier spacing) field: 4 bits\n\n- **frameId** (frame identifier) field: 8 bits\n\n- **subframeId** (subframe identifier) field: 4 bits\n\n- **slotId** (slot identifier) field: 6 bits\n\n- **symbolId** (symbolId identifier) field: 6 bits",
+      "headingNumber": "7.4.10"
+    },
+    {
+      "id": "9",
+      "sectionType": 9,
+      "title": "Section Type 9 elements",
+      "shortTitle": "Section Type 9 elements",
+      "reserved": false,
+      "summary": "",
+      "headingNumber": "7.4.11"
+    },
+    {
+      "id": "10",
+      "sectionType": 10,
+      "title": "Section Type 10 elements",
+      "shortTitle": "Section Type 10 elements",
+      "reserved": false,
+      "summary": "Section Type 10 is used for sending RRM measurement reports from O-RU to\nO-DU; see Table 7.4.12-1:\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- value = 0 (uplink) shall be used\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **reserved** (reserved for future use) field: 4 bits**.**\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.\n\n- **slotId** (slot identifier) field: 6 bits.",
+      "headingNumber": "7.4.12"
+    },
+    {
+      "id": "11",
+      "sectionType": 11,
+      "title": "Section Type 11 elements",
+      "shortTitle": "Section Type 11 elements",
+      "reserved": false,
+      "summary": "Section Type 11 is sent from O-DU to O-RU to request RRM measurements.\nIt supports a command to request IpN for unallocated PRBs, see table\n7.4.13-1.\n\n- Common Header Fields:\n\n- **dataDirection** (data direction (gNB Tx/Rx)) field: 1 bit**.**\n\n- value = 0 (uplink) shall be used\n\n- **payloadVersion** (payload version) field: 3 bits:\n\n- value = 1 shall be set (1st protocol version for payload\n  and time reference format).\n\n- **reserved** (reserved for future use) field: 4 bits.\n\n- **frameId** (frame identifier) field: 8 bits.\n\n- **subframeId** (subframe identifier) field: 4 bits.",
+      "headingNumber": "7.4.13"
+    }
+  ],
+  "sectionExtensions": [
+    {
+      "id": "1",
+      "extId": 1,
+      "title": "Beamforming weights",
+      "summary": "#### 7.7.1.1 Overview\n\nSection Extension 1 applies to the sending of beamforming weights from\nthe O-DU to the O-RU. When Section Extension 1 is present in a section\ndescription, O-RU shall associate the set of beamforming weights\nconveyed in Section Extension 1 with the beamId conveyed in the section\ndescription. In subsequent C-Plane messages, the same beamId can be\ninvoked without sending the beamforming weights again.\n\nNOTE: This allows downloaded weights to have \"persistence\" which saves\nDL throughput by not requiring sending of weights multiple times.",
+      "headingNumber": "7.7.1"
+    },
+    {
+      "id": "2",
+      "extId": 2,
+      "title": "Beamforming attributes",
+      "summary": "#### 7.7.2.1 Overview\n\nSection Extension 2 applies only to Section Types 1 and 3. Section\nExtension 2 applies to the sending of beamforming attributes from the\nO-DU to the O-RU which is described in Annex J.\n\n[Table 7.7.2.1‑1](#tab_SE2_DataFormat) shows the format of Section\nExtension 2.\n\nTable 7.7.2.1‑1:\nSection Extension 2 Data Format\n\n0 (msb)\n1\n2\n3\n4\n5\n6\n7 (lsb)\n# of bytes\n\nef\nextType = 0x02\n1\nOctet N\n\nextLen\n1\nOctet N+1\n\nbfaCompHdr\n2\nOctet N+2\n\nbfAzPt\nvar\nOctet N+3\n\nbfZePt\nvar\n\nbfAz3dd\nvar\n\nbfZe3dd\nvar\n\nzero-padding\nbfAzSl\nbfZeSl\n1\n\nzero padding to achieve 4-byte alignment as needed",
+      "headingNumber": "7.7.2"
+    },
+    {
+      "id": "3",
+      "extId": 3,
+      "title": "DL precoding parameters",
+      "summary": "#### 7.7.3.1 Overview\n\nSection Extension 3 applies only to Category B O-RU and to Section Types\n1 and 3. Section Extension 3 may be used only for precoding schemes\nTransmit Diversity and Spatial Multiplexing with Large Delay CDD; for\nother LTE transmission modes and for NR, if there is precoding in the DL\nprocessing chain, precoding shall be included in the beamforming\noperation (that is, encoded in the beamforming weights).\n\n[Table 7.7.3.1‑1](#tab_7_7_3_1_SE3_Data_Format_First_Layer) shows the\nformat of Section Extension 3 for the first data layer.",
+      "headingNumber": "7.7.3"
+    },
+    {
+      "id": "4",
+      "extId": 4,
+      "title": "Modulation compression parameters",
+      "summary": "#### 7.7.4.1 Overview\n\nSection Extension 4 applies only to Section Types 1, 3 and 5. Section\nExtension 4 enables the O-DU to convey to the O-RU one set of \"csf and\nmodCompScaler values\" which is needed for modulation compression\ndescribed in Annex A.5.\n\n[**Table 7.7.4.1‑1**](#_Ref64631977) shows the format of Section\nExtension 4.\n\nTable 7.7.4.1‑1: Format of\nSection Extension 4 (modulation compression parameters)\n\n0 (msb)\n1\n2\n3\n4\n5\n6\n7 (lsb)\n# of bytes\n\nef\nextType = 0x04\n1\nOctet N\n\nextLen = 0x01 (1 word)\n1\nN+1\n\ncsf\nmodCompScaler[14:8]\n1\nN+2\n\nmodCompScaler[7:0]\n1\nN+3",
+      "headingNumber": "7.7.4"
+    },
+    {
+      "id": "5",
+      "extId": 5,
+      "title": "Modulation compression additional parameters",
+      "summary": "#### 7.7.5.1 Overview",
+      "headingNumber": "7.7.5"
+    },
+    {
+      "id": "6",
+      "extId": 6,
+      "title": "Non-contiguous PRB allocation in time and frequency domain",
+      "summary": "#### 7.7.6.1 Overview\n\nSection Extension 6 applies to Section Types 1, 3, 5, 10, and 11.\n\nSection Extension 6 enables allocation of non-contiguous sets of PRBs\n(Resource Block Groups, or RBGs) in frequency and time domain. This\nreduces the C-Plane overhead when users or channels are allocated with\nnon-contiguous sets of PRBs in time and frequency.\n\nIf Section Extension 6 is present in a section description, then the\nfollowing requirements apply:",
+      "headingNumber": "7.7.6"
+    },
+    {
+      "id": "7",
+      "extId": 7,
+      "title": "eAxC mask",
+      "summary": "#### 7.7.7.1 Overview",
+      "headingNumber": "7.7.7"
+    },
+    {
+      "id": "8",
+      "extId": 8,
+      "title": "Regularization factor",
+      "summary": "#### 7.7.8.1 Overview\n\nThis Section Extension is used for conveying value of regularization\nfactor used for generating multi-user beamforming weight for the\nscheduled UEs in a slot. Regularization factor is the noise variance\nused in, for example, MMSE (Minimum Mean Square Error) and RZF\n(Regularized Zero-Forcing) computation of multi-user beamforming\nweights. The intended use case applies to Section Type 5 for sending\nregularization factor. See Annex J for further description of the\nregularization factor's use in uplink and downlink.",
+      "headingNumber": "7.7.8"
+    },
+    {
+      "id": "9",
+      "extId": 9,
+      "title": "Dynamic Spectrum Sharing parameters",
+      "summary": "#### 7.7.9.1 Introduction\n\nThis Section Extension applies to all Section Types that support Section\nExtensions and are sent from O-DU to O-RU.\n\n[Table 7.7.9.1‑1](#_Ref97937173) shows the format of this Section\nExtension.\n\nTable 7.7.9.1‑1: Format\nfor Section Extension 9 (DSS parameter)\n\n0 (msb)\n1\n2\n3\n4\n5\n6\n7 (lsb)\n# of bytes\n\nef\nextType = 0x09\n1\nOctet N\n\nextLen = 0x01 (1 word)\n1\nN+1\n\ntechnology[7:0]\n1\nN+2\n\nreserved\n1\nN+3",
+      "headingNumber": "7.7.9"
+    },
+    {
+      "id": "10",
+      "extId": 10,
+      "title": "Group configuration of multiple ports",
+      "summary": "#### 7.7.10.1 Overview\n\nThis Section Extension applies to Section Types 1, 3 and 5. In most\ncases, C-Plane section information for the multiple ports (i.e. layers\nor Tx/Rx paths) can be the same except beam IDs or UE IDs. When multiple\nports share common section information within an O-RU, the C-Plane\nsections to be sent via corresponding ports are merged into one C-Plane\nsection via a representative port using this Section Extension. The\nformatting of this Section Extension is determined by the value of\nbeamGroupType parameter.",
+      "headingNumber": "7.7.10"
+    },
+    {
+      "id": "11",
+      "extId": 11,
+      "title": "Flexible beamforming weights",
+      "summary": "#### 7.7.11.1 Overview",
+      "headingNumber": "7.7.11"
+    },
+    {
+      "id": "12",
+      "extId": 12,
+      "title": "Non-contiguous PRB allocation with frequency ranges",
+      "summary": "#### 7.7.12.1 Overview\n\nSection Extension 12 applies to Section Types 1, 3, 5, 10 and 11. It\ncannot be used with Section Extension 6 in the same section description.",
+      "headingNumber": "7.7.12"
+    },
+    {
+      "id": "13",
+      "extId": 13,
+      "title": "PRB allocation with frequency hopping",
+      "summary": "#### 7.7.13.1 Overview\n\nSection Extension 13 applies only to Section Types 1, 3 and 5.\n\nSection Extension 13 allows to describe two or more PRB allocations\nstarting at different symbols and different PRB. It is intended to be\nused for allocations with intra-slot frequency hopping. This Section\nExtension reduces the C-Plane overhead when users or channels are\nallocated with intra-slot frequency hopping. This extension is more\nspace-efficient than the use of several section descriptions. Structure\nof Section Extension 13 is presented in [Table\n7.7.13.1‑1](#tab_7_7_13_1_SE13).",
+      "headingNumber": "7.7.13"
+    },
+    {
+      "id": "14",
+      "extId": 14,
+      "title": "Nulling layer information for ueId based beamforming",
+      "summary": "#### 7.7.14.1 Overview\n\nThis Section Extension applies to Section Type 5. This enables the O-DU\nto provide layer-by-layer indication, which denotes that the\ncorresponding ueId is for nulling-layer indication.\n\nSection Extension 14 shall follow the formatting defined in Table\n[7.7.14.1‑1](#tab_7_SE14).",
+      "headingNumber": "7.7.14"
+    },
+    {
+      "id": "15",
+      "extId": 15,
+      "title": "Mixed numerology information for ueId based beamforming",
+      "summary": "#### 7.7.15.1 Overview\n\nThis Section Extension applies to Section Types 5 and 6. When this\nSection Extension is applied to Section Type 6, the value of FFT type in\nframeStructure and cpLength can be set as 0.\n\nSection Extension 15 shall follow the formatting defined in Table\n[7.7.15.1‑1](#tab_7_SE15).\n\nTable 7.7.15.1‑1: Section\nExtension 15\n\n0 (msb)\n1\n2\n3\n4\n5\n6\n7 (lsb)\n# of bytes\n\nef\nextType = 0x0F\n1\nOctet N\n\nextLen = 0x02 (2 words)\n1\nN+1\n\nframeStructure\n1\nN+2\n\nfreqOffset\n3\nN+3\n\ncpLength\n2\nN+6\n\n#### 7.7.15.2 frameStructure (frame structure)",
+      "headingNumber": "7.7.15"
+    },
+    {
+      "id": "16",
+      "extId": 16,
+      "title": "Antenna mapping in UE channel information based UL beamforming",
+      "summary": "#### 7.7.16.1 Overview",
+      "headingNumber": "7.7.16"
+    },
+    {
+      "id": "17",
+      "extId": 17,
+      "title": "Indication of user port group",
+      "summary": "#### 7.7.17.1 Overview",
+      "headingNumber": "7.7.17"
+    },
+    {
+      "id": "18",
+      "extId": 18,
+      "title": "Uplink transmission management",
+      "summary": "#### 7.7.18.1 Introduction\n\nThis Section Extension applies to sending of transmission windows\ninformation for management of the uplink user data transmission from the\nO-RU. With the two parameters included in this Section Extension the\nO-RU shall transmit the corresponding user data within that time window.\nThe data shall either be sent in normal transmission mode or be\nuniformly distributed in time depending on value of toT parameter. This\nSection Extension applies to Section Types 1, 3, and 5. The format of\nSection Extension 18 is specified in [Table 7.7.18.1‑1](#_Ref97937858)",
+      "headingNumber": "7.7.18"
+    },
+    {
+      "id": "19",
+      "extId": 19,
+      "title": "Compact beamforming information for multiple port",
+      "summary": "#### 7.7.19.1 Overview\n\nThis Section Extension applies to Section Types 1 and 3. This Section\nExtension shall be used for sending compact beamforming information for\nmultiple antenna ports (the term 'port' used henceforth in context of\nthis Section Extension refers to logical antenna port). The optional\n\"little endian byte order\" is applied to bfwI/bfwQ fields if chosen via\nM-Plane. Refer to Annex D.2 for details of little endian byte order.\nCSI-RS channel will benefit the most from using this extension,\nconsidering large number of CSI-RS ports and multiple CSI resource sets.",
+      "headingNumber": "7.7.19"
+    },
+    {
+      "id": "20",
+      "extId": 20,
+      "title": "Dedicated puncturing",
+      "summary": "#### 7.7.20.1 Overview\n\nThis Section Extension can be used with Section Types 1, 3, 5, 10, and\n11. This extension specifies a puncturing pattern to be applied to the\nsection description and optionally to sections following the section\ndescription in the same C-Plane message. This extension contains a\ncommon header with the number of puncturing patterns, followed by\npuncSymbolMask, PRB ranges, puncReMask and optionally RBG mask fields\nfor each puncturing pattern.",
+      "headingNumber": "7.7.20"
+    },
+    {
+      "id": "21",
+      "extId": 21,
+      "title": "Variable PRB group size for channel information",
+      "summary": "#### 7.7.21.1 Overview\n\nThis Section Extension may be sent with Section Type 5 or Section Type\n6. It enables the O-DU to send channel information with dynamic PRB\ngroup size that can match the channel variation in the frequency domain\nand reduce the fronthaul traffic. SE 21 is applicable for CIBF.",
+      "headingNumber": "7.7.21"
+    },
+    {
+      "id": "22",
+      "extId": 22,
+      "title": "ACK/NACK request",
+      "summary": "#### 7.7.22.1 Overview\n\nSection Extension 22 enables the O-DU to request ACK/NACK feedback using\nSection Type 8 C-Plane message for a section description. SE 22 can be\nused with all Section Types that support Section Extensions and are sent\nfrom O-DU to O-RU. SE 22 can be used with all Section Extensions sent\nfrom O-DU to O-RU. Section Extension 22 shall follow the format defined\nin Table [7.7.22.1-1](#tab_SE22_acknackreqid).\n\nTable 7.7.22.1-1:\nSection Extension 22 for ACK/NACK request\n\n0 (msb)\n1\n2\n3\n4\n5\n6\n7 (lsb)\n# of bytes\n\nef\nextType = 0x16\n1\nOctet N\n\nextLen = 0x01 (1 word)\n1\nN+1",
+      "headingNumber": "7.7.22"
+    },
+    {
+      "id": "23",
+      "extId": 23,
+      "title": "Arbitrary symbol pattern modulation compression parameters",
+      "summary": "#### 7.7.23.1 Overview\n\nThis Section Extension enables specifying multiple sets of\n'mcScaleReMask, csf and mcScaleOffset' values for one or more\n'SymPrbPatterns'. The term 'SymPrbPattern' is used to specify set of\nPRBs that can span an entire PRB range (specified using prbPattern) and\nmultiple symbols (specified using symMask). In context of this Section\nExtension the term SymPrbPattern is defined for each mode of operation:\n\n- for PRB-MASK mode SymPrbPattern is one set of parameters symMask and\n  prbPattern,",
+      "headingNumber": "7.7.23"
+    },
+    {
+      "id": "24",
+      "extId": 24,
+      "title": "PUSCH DMRS configuration",
+      "summary": "#### 7.7.24.1 Overview\n\nThe Section Extension 24 is used with Section Type 5 to convey PUSCH\nDMRS configuration used for DMRS-BF-EQ and DMRS-BF-NEQ beamforming\nmethods. The principles of providing DMRS configuration in Section\nType 5 are specified in clause 12.6.1.3.1.",
+      "headingNumber": "7.7.24"
+    },
+    {
+      "id": "25",
+      "extId": 25,
+      "title": "Symbol reordering for DMRS-BF",
+      "summary": "#### 7.7.25.1 Overview",
+      "headingNumber": "7.7.25"
+    },
+    {
+      "id": "26",
+      "extId": 26,
+      "title": "Frequency offset feedback",
+      "summary": "#### 7.7.26.1 Overview\n\nThis Section Extension is used with Section Type 5 to deliver the UE\nfrequency offset from the O-DU to the O-RU and is valid only when\ndataDirection bit = 0 and when SE 24 is present and SE 24 shall precede\nSE 26. The O-RU derives frequency offset value for channel estimation\nusing the received value and the estimated value. The format of SE 26 is\ndefined in Table 7.7.26.1-1.",
+      "headingNumber": "7.7.26"
+    },
+    {
+      "id": "27",
+      "extId": 27,
+      "title": "O-DU controlled dimensionality reduction",
+      "summary": "#### 7.7.27.1 Overview",
+      "headingNumber": "7.7.27"
+    },
+    {
+      "id": "28",
+      "extId": 28,
+      "title": "O-DU controlled frequency resolution for SINR reporting",
+      "summary": "#### 7.7.28.1 Overview",
+      "headingNumber": "7.7.28"
+    },
+    {
+      "id": "29",
+      "extId": 29,
+      "title": "Cyclic delay adjustment",
+      "summary": "#### 7.7.29.1 Overview",
+      "headingNumber": "7.7.29"
+    },
+    {
+      "id": "30",
+      "extId": 30,
+      "title": "PUSCH repetition indication",
+      "summary": "#### 7.7.30.1 Overview\n\nSection Extension 30 applies to Section Type 5 to provide PUSCH\nrepetition indications for scheduled PUSCH transmissions. Section\nExtension 30 is valid only when dataDirection bit = 0. O-RU supporting\nPUSCH repetition indication may optimize its PUSCH reception for\nrepeated transmissions if it receives PUSCH repetition indication from\nO-DU. In the present document, SE 30 is specified to support only\nsingle-layer PUSCH repetition per UE.",
+      "headingNumber": "7.7.30"
+    }
+  ],
+  "fields": [
+    {
+      "id": "dataDirection",
+      "name": "dataDirection",
+      "longName": "data direction (gNB Tx/Rx)",
+      "category": "common",
+      "headingNumber": "7.5.2.1"
+    },
+    {
+      "id": "payloadVersion",
+      "name": "payloadVersion",
+      "longName": "payload version",
+      "category": "common",
+      "headingNumber": "7.5.2.2"
+    },
+    {
+      "id": "filterIndex",
+      "name": "filterIndex",
+      "longName": "filter index",
+      "category": "common",
+      "headingNumber": "7.5.2.3"
+    },
+    {
+      "id": "frameId",
+      "name": "frameId",
+      "longName": "frame identifier",
+      "category": "common",
+      "headingNumber": "7.5.2.4"
+    },
+    {
+      "id": "subframeId",
+      "name": "subframeId",
+      "longName": "subframe identifier",
+      "category": "common",
+      "headingNumber": "7.5.2.5"
+    },
+    {
+      "id": "slotId",
+      "name": "slotId",
+      "longName": "slot identifier",
+      "category": "common",
+      "headingNumber": "7.5.2.6"
+    },
+    {
+      "id": "startSymbolId",
+      "name": "startSymbolId",
+      "longName": "start symbol identifier",
+      "category": "common",
+      "headingNumber": "7.5.2.7"
+    },
+    {
+      "id": "numberOfsections",
+      "name": "numberOfsections",
+      "longName": "number of sections",
+      "category": "common",
+      "headingNumber": "7.5.2.8"
+    },
+    {
+      "id": "sectionType",
+      "name": "sectionType",
+      "longName": "Section Type",
+      "category": "common",
+      "headingNumber": "7.5.2.9"
+    },
+    {
+      "id": "udCompHdr",
+      "name": "udCompHdr",
+      "longName": "user data compression header",
+      "category": "common",
+      "headingNumber": "7.5.2.10"
+    },
+    {
+      "id": "numberOfUEs",
+      "name": "numberOfUEs",
+      "longName": "number Of ueIds",
+      "category": "common",
+      "headingNumber": "7.5.2.11"
+    },
+    {
+      "id": "timeOffset",
+      "name": "timeOffset",
+      "longName": "time offset",
+      "category": "common",
+      "headingNumber": "7.5.2.12"
+    },
+    {
+      "id": "frameStructure",
+      "name": "frameStructure",
+      "longName": "frame structure",
+      "category": "common",
+      "headingNumber": "7.5.2.13"
+    },
+    {
+      "id": "cpLength",
+      "name": "cpLength",
+      "longName": "cyclic prefix length",
+      "category": "common",
+      "headingNumber": "7.5.2.14"
+    },
+    {
+      "id": "ciCompHdr",
+      "name": "ciCompHdr",
+      "longName": "channel information compression header",
+      "category": "common",
+      "headingNumber": "7.5.2.15"
+    },
+    {
+      "id": "scs",
+      "name": "scs",
+      "longName": "sub-carrier spacing",
+      "category": "common",
+      "headingNumber": "7.5.2.16"
+    },
+    {
+      "id": "cmdScope",
+      "name": "cmdScope",
+      "longName": "command scope",
+      "category": "common",
+      "headingNumber": "7.5.2.17"
+    },
+    {
+      "id": "numberOfST4Cmds",
+      "name": "numberOfST4Cmds",
+      "longName": "Number of Section Type 4 commands",
+      "category": "common",
+      "headingNumber": "7.5.2.18"
+    },
+    {
+      "id": "numSinrPerPrb",
+      "name": "numSinrPerPrb",
+      "longName": "number of SINR values per PRB or per section",
+      "category": "common",
+      "headingNumber": "7.5.2.19"
+    },
+    {
+      "id": "sectionId",
+      "name": "sectionId",
+      "longName": "section identifier",
+      "category": "section",
+      "headingNumber": "7.5.3.1"
+    },
+    {
+      "id": "rb",
+      "name": "rb",
+      "longName": "resource block indicator",
+      "category": "section",
+      "headingNumber": "7.5.3.2"
+    },
+    {
+      "id": "symInc",
+      "name": "symInc",
+      "longName": "symbol number increment command",
+      "category": "section",
+      "headingNumber": "7.5.3.3"
+    },
+    {
+      "id": "startPrbc",
+      "name": "startPrbc",
+      "longName": "starting PRB of data section description",
+      "category": "section",
+      "headingNumber": "7.5.3.4"
+    },
+    {
+      "id": "reMask",
+      "name": "reMask",
+      "longName": "resource element mask",
+      "category": "section",
+      "headingNumber": "7.5.3.5"
+    },
+    {
+      "id": "numPrbc",
+      "name": "numPrbc",
+      "longName": "number of contiguous PRBs per data section description",
+      "category": "section",
+      "headingNumber": "7.5.3.6"
+    },
+    {
+      "id": "numSymbol",
+      "name": "numSymbol",
+      "longName": "number of symbols",
+      "category": "section",
+      "headingNumber": "7.5.3.7"
+    },
+    {
+      "id": "ef",
+      "name": "ef",
+      "longName": "extension flag",
+      "category": "section",
+      "headingNumber": "7.5.3.8"
+    },
+    {
+      "id": "beamId",
+      "name": "beamId",
+      "longName": "beam identifier",
+      "category": "section",
+      "headingNumber": "7.5.3.9"
+    },
+    {
+      "id": "freqOffset",
+      "name": "freqOffset",
+      "longName": "frequency offset",
+      "category": "section",
+      "headingNumber": "7.5.3.11"
+    },
+    {
+      "id": "laaMsgType",
+      "name": "laaMsgType",
+      "longName": "LAA message type",
+      "category": "section",
+      "headingNumber": "7.5.3.14"
+    },
+    {
+      "id": "laaMsgLen",
+      "name": "laaMsgLen",
+      "longName": "LAA message length",
+      "category": "section",
+      "headingNumber": "7.5.3.15"
+    },
+    {
+      "id": "lbtDeferFactor",
+      "name": "lbtDeferFactor",
+      "longName": "listen-before-talk defer factor",
+      "category": "section",
+      "headingNumber": "7.5.3.17"
+    },
+    {
+      "id": "lbtBackoffCounter",
+      "name": "lbtBackoffCounter",
+      "longName": "listen-before-talk backoff counter",
+      "category": "section",
+      "headingNumber": "7.5.3.18"
+    },
+    {
+      "id": "lbtOffset",
+      "name": "lbtOffset",
+      "longName": "listen-before-talk offset",
+      "category": "section",
+      "headingNumber": "7.5.3.19"
+    },
+    {
+      "id": "MCOT",
+      "name": "MCOT",
+      "longName": "maximum channel occupancy time",
+      "category": "section",
+      "headingNumber": "7.5.3.20"
+    },
+    {
+      "id": "lbtMode",
+      "name": "lbtMode",
+      "longName": "LBT mode",
+      "category": "section",
+      "headingNumber": "7.5.3.21"
+    },
+    {
+      "id": "lbtPdschRes",
+      "name": "lbtPdschRes",
+      "longName": "LBT PDSCH result",
+      "category": "section",
+      "headingNumber": "7.5.3.22"
+    },
+    {
+      "id": "sfStatus",
+      "name": "sfStatus",
+      "longName": "subframe status",
+      "category": "section",
+      "headingNumber": "7.5.3.23"
+    },
+    {
+      "id": "lbtDrsRes",
+      "name": "lbtDrsRes",
+      "longName": "LBT DRS result",
+      "category": "section",
+      "headingNumber": "7.5.3.24"
+    },
+    {
+      "id": "initialPartialSF",
+      "name": "initialPartialSF",
+      "longName": "Initial partial SF",
+      "category": "section",
+      "headingNumber": "7.5.3.25"
+    },
+    {
+      "id": "lbtBufErr",
+      "name": "lbtBufErr",
+      "longName": "LBT buffer error",
+      "category": "section",
+      "headingNumber": "7.5.3.26"
+    },
+    {
+      "id": "sfnSf",
+      "name": "sfnSf",
+      "longName": "SFN/SF end",
+      "category": "section",
+      "headingNumber": "7.5.3.27"
+    },
+    {
+      "id": "lbtCWConfig_H",
+      "name": "lbtCWConfig_H",
+      "longName": "HARQ parameters for congestion window management",
+      "category": "section",
+      "headingNumber": "7.5.3.28"
+    },
+    {
+      "id": "lbtCWConfig_T",
+      "name": "lbtCWConfig_T",
+      "longName": "TB parameters for congestion window management",
+      "category": "section",
+      "headingNumber": "7.5.3.29"
+    },
+    {
+      "id": "lbtTrafficClass",
+      "name": "lbtTrafficClass",
+      "longName": "traffic class priority for congestion window management",
+      "category": "section",
+      "headingNumber": "7.5.3.30"
+    },
+    {
+      "id": "lbtCWR_Rst",
+      "name": "lbtCWR_Rst",
+      "longName": "notification about packet reception successful or not",
+      "category": "section",
+      "headingNumber": "7.5.3.31"
+    },
+    {
+      "id": "ciCompParam",
+      "name": "ciCompParam",
+      "longName": "channel information compression parameter",
+      "category": "section",
+      "headingNumber": "7.5.3.32"
+    },
+    {
+      "id": "reserved",
+      "name": "reserved",
+      "longName": "reserved for future use",
+      "category": "section",
+      "headingNumber": "7.5.3.33"
+    },
+    {
+      "id": "numberOfAcks",
+      "name": "numberOfAcks",
+      "longName": "number of ACKs",
+      "category": "section",
+      "headingNumber": "7.5.3.34"
+    },
+    {
+      "id": "numberOfNacks",
+      "name": "numberOfNacks",
+      "longName": "number of NACKs",
+      "category": "section",
+      "headingNumber": "7.5.3.35"
+    },
+    {
+      "id": "ackId",
+      "name": "ackId",
+      "longName": "ACK Id",
+      "category": "section",
+      "headingNumber": "7.5.3.36"
+    },
+    {
+      "id": "nackId",
+      "name": "nackId",
+      "longName": "NACK Id",
+      "category": "section",
+      "headingNumber": "7.5.3.37"
+    },
+    {
+      "id": "st4CmdType",
+      "name": "st4CmdType",
+      "longName": "Section Type 4 command type",
+      "category": "section",
+      "headingNumber": "7.5.3.38"
+    },
+    {
+      "id": "st4CmdLen",
+      "name": "st4CmdLen",
+      "longName": "Section Type 4 command length",
+      "category": "section",
+      "headingNumber": "7.5.3.39"
+    },
+    {
+      "id": "numSlots",
+      "name": "numSlots",
+      "longName": "number of slots",
+      "category": "section",
+      "headingNumber": "7.5.3.40"
+    },
+    {
+      "id": "ackNackReqId",
+      "name": "ackNackReqId",
+      "longName": "ACK/NACK Request ID",
+      "category": "section",
+      "headingNumber": "7.5.3.41"
+    },
+    {
+      "id": "symbolMask",
+      "name": "symbolMask",
+      "longName": "symbol mask",
+      "category": "section",
+      "headingNumber": "7.5.3.42"
+    },
+    {
+      "id": "disableTDBFNs",
+      "name": "disableTDBFNs",
+      "longName": "disable sending tdBeamNum",
+      "category": "section",
+      "headingNumber": "7.5.3.43"
+    },
+    {
+      "id": "tdBeamGrp",
+      "name": "tdBeamGrp",
+      "longName": "time-domain beam group identity",
+      "category": "section",
+      "headingNumber": "7.5.3.44"
+    },
+    {
+      "id": "bfwCompHdr",
+      "name": "bfwCompHdr",
+      "longName": "beamforming weight compression header",
+      "category": "section",
+      "headingNumber": "7.5.3.45"
+    },
+    {
+      "id": "disableTDBFWs",
+      "name": "disableTDBFWs",
+      "longName": "disable sending time-domain beamforming weights",
+      "category": "section",
+      "headingNumber": "7.5.3.46"
+    },
+    {
+      "id": "bfwCompParam",
+      "name": "bfwCompParam",
+      "longName": "beamforming weight compression parameter",
+      "category": "section",
+      "headingNumber": "7.5.3.47"
+    },
+    {
+      "id": "dirPattern",
+      "name": "dirPattern",
+      "longName": "symbol data direction (gNB Tx/Rx) pattern",
+      "category": "section",
+      "headingNumber": "7.5.3.49"
+    },
+    {
+      "id": "guardPattern",
+      "name": "guardPattern",
+      "longName": "guard pattern bitmask",
+      "category": "section",
+      "headingNumber": "7.5.3.50"
+    },
+    {
+      "id": "tdBeamNum",
+      "name": "tdBeamNum",
+      "longName": "time-domain beam number",
+      "category": "section",
+      "headingNumber": "7.5.3.56"
+    },
+    {
+      "id": "mf",
+      "name": "mf",
+      "longName": "measurement flag",
+      "category": "section",
+      "headingNumber": "7.5.3.57"
+    },
+    {
+      "id": "measTypeId",
+      "name": "measTypeId",
+      "longName": "measurement report type identifier",
+      "category": "section",
+      "headingNumber": "7.5.3.58"
+    },
+    {
+      "id": "measDataSize",
+      "name": "measDataSize",
+      "longName": "measurement data size",
+      "category": "section",
+      "headingNumber": "7.5.3.59"
+    },
+    {
+      "id": "ueTae",
+      "name": "ueTae",
+      "longName": "UE Timing Advance Error",
+      "category": "section",
+      "headingNumber": "7.5.3.60"
+    },
+    {
+      "id": "ueLayerPower",
+      "name": "ueLayerPower",
+      "longName": "UE layer power",
+      "category": "section",
+      "headingNumber": "7.5.3.61"
+    },
+    {
+      "id": "ueFreqOffset",
+      "name": "ueFreqOffset",
+      "longName": "UE frequency offset",
+      "category": "section",
+      "headingNumber": "7.5.3.62"
+    },
+    {
+      "id": "ipnPower",
+      "name": "ipnPower",
+      "longName": "Interference plus Noise power",
+      "category": "section",
+      "headingNumber": "7.5.3.63"
+    },
+    {
+      "id": "antDmrsSnrVal",
+      "name": "antDmrsSnrVal",
+      "longName": "antenna DMRS-SNR",
+      "category": "section",
+      "headingNumber": "7.5.3.64"
+    },
+    {
+      "id": "measCmdSize",
+      "name": "measCmdSize",
+      "longName": "measurement command size",
+      "category": "section",
+      "headingNumber": "7.5.3.65"
+    },
+    {
+      "id": "numElements",
+      "name": "numElements",
+      "longName": "number of measurement values",
+      "category": "section",
+      "headingNumber": "7.5.3.66"
+    },
+    {
+      "id": "sinrCompParam",
+      "name": "sinrCompParam",
+      "longName": "SINR data compression parameter",
+      "category": "section",
+      "headingNumber": "7.5.3.67"
+    },
+    {
+      "id": "ueRadialSpeed",
+      "name": "ueRadialSpeed",
+      "longName": "UE radial speed",
+      "category": "section",
+      "headingNumber": "7.5.3.69"
+    },
+    {
+      "id": "ueAzAoa",
+      "name": "ueAzAoa",
+      "longName": "UE azimuth angle of arrival",
+      "category": "section",
+      "headingNumber": "7.5.3.70"
+    },
+    {
+      "id": "ueZeAoa",
+      "name": "ueZeAoa",
+      "longName": "UE zenith angle of arrival",
+      "category": "section",
+      "headingNumber": "7.5.3.71"
+    },
+    {
+      "id": "uePosToaOffset",
+      "name": "uePosToaOffset",
+      "longName": "UE positioning time of arrival offset",
+      "category": "section",
+      "headingNumber": "7.5.3.72"
+    },
+    {
+      "id": "currUeFreqOffset",
+      "name": "currUeFreqOffset",
+      "longName": "UE frequency offset estimation in the current slot",
+      "category": "section",
+      "headingNumber": "7.5.3.73"
+    },
+    {
+      "id": "muInterferenceLevel",
+      "name": "muInterferenceLevel",
+      "longName": "post-equalization MU interference level",
+      "category": "section",
+      "headingNumber": "7.5.3.74"
+    }
+  ]
+}

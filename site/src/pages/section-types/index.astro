@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionTypeCard from "../../components/SectionTypeCard.astro";
+import { SECTION_TYPES } from "../../data/curated";
+---
+
+<BaseLayout title="Section Types · O-RAN Spec Explorer">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight">Section Types</h1>
+    <p class="mt-2 text-ink-600 dark:text-ink-300 max-w-3xl">
+      C-Plane Section Type은 메시지의 의도를 정의하는 가장 큰 분류입니다. 데이터 채널 스케줄링(ST 1),
+      PRACH/혼합 누메롤로지(ST 3), 슬롯 단위 컨트롤(ST 4), UE 단위 스케줄링(ST 5), 채널 정보(ST 6),
+      LAA/LBT(ST 7), 일반 빔포밍(ST 8), ACK/NACK(ST 9), SRS(ST 10), PUSCH DMRS(ST 11) — 각각이
+      어떤 상황에서 사용되는지 카드를 클릭해 확인하세요.
+    </p>
+  </header>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {SECTION_TYPES.map((st) => <SectionTypeCard st={st} />)}
+  </div>
+</BaseLayout>

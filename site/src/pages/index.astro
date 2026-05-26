@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionTypeCard from "../components/SectionTypeCard.astro";
+import ExtensionCard from "../components/ExtensionCard.astro";
+import { SECTION_TYPES, SECTION_EXTENSIONS } from "../data/curated";
+import { GLOSSARY } from "../data/glossary";
+const featuredST = SECTION_TYPES.filter((s) => [1, 3, 5, 6, 11].includes(s.id));
+const featuredSE = SECTION_EXTENSIONS.filter((s) => [1, 6, 11, 14, 22].includes(s.id));
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="O-RAN Spec Explorer">
+  <section class="py-10 lg:py-14">
+    <div class="max-w-3xl">
+      <span class="inline-block text-xs font-mono px-2 py-1 rounded bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300">
+        O-RAN.WG4.TS.CUS · v20.00
+      </span>
+      <h1 class="text-4xl lg:text-5xl font-bold tracking-tight mt-4">
+        Digital Unit ↔ Radio Unit<br/>
+        <span class="text-brand-600">컨트롤 메시지 완벽 가이드</span>
+      </h1>
+      <p class="mt-5 text-lg text-ink-600 dark:text-ink-300 leading-relaxed">
+        새로 합류한 동료가 처음 봐도 "이 메시지가 뭘 의도하는지, 무엇이 발생하는지, 어떤 자원·UE·안테나·빔에 영향을 주는지" 한 시간 안에 파악할 수 있게 설계했습니다.
+        Section Type 0~11, Section Extension 1~30, 그리고 모든 공통 필드를 비유와 그림으로 풀어냅니다.
+      </p>
+    </div>
+
+    <!-- New starter pathway -->
+    <div class="mt-10 grid md:grid-cols-3 gap-4">
+      <a href={`${base}concepts/`} class="rounded-xl border-2 border-brand-200 dark:border-brand-900/50 p-5 bg-gradient-to-br from-brand-50 to-white dark:from-brand-900/20 dark:to-ink-900 hover:shadow-lg transition">
+        <div class="text-xs font-mono text-brand-700 dark:text-brand-300 mb-1">STEP 1</div>
+        <div class="text-lg font-semibold mb-1">개념·용어집 먼저 보기</div>
+        <p class="text-sm text-ink-600 dark:text-ink-300">PRB, beamId, eAxC, DMRS, C-plane 같은 약어를 비유로 풀어 설명. {GLOSSARY.length}개 핵심 용어.</p>
+      </a>
+      <a href={`${base}architecture/`} class="rounded-xl border-2 border-brand-200 dark:border-brand-900/50 p-5 bg-gradient-to-br from-brand-50 to-white dark:from-brand-900/20 dark:to-ink-900 hover:shadow-lg transition">
+        <div class="text-xs font-mono text-brand-700 dark:text-brand-300 mb-1">STEP 2</div>
+        <div class="text-lg font-semibold mb-1">아키텍처 한 장으로 이해하기</div>
+        <p class="text-sm text-ink-600 dark:text-ink-300">O-DU↔O-RU↔UE가 어떻게 맞물리는지. 한 슬롯 동안 일어나는 모든 일.</p>
+      </a>
+      <a href={`${base}section-types/1/`} class="rounded-xl border-2 border-brand-200 dark:border-brand-900/50 p-5 bg-gradient-to-br from-brand-50 to-white dark:from-brand-900/20 dark:to-ink-900 hover:shadow-lg transition">
+        <div class="text-xs font-mono text-brand-700 dark:text-brand-300 mb-1">STEP 3</div>
+        <div class="text-lg font-semibold mb-1">Section Type 1부터 깊게</div>
+        <p class="text-sm text-ink-600 dark:text-ink-300">5G 트래픽의 90%가 통과하는 가장 흔한 메시지. 비유→필드→시각화→예시까지.</p>
+      </a>
+    </div>
+
+    <div class="mt-6 flex flex-wrap gap-2">
+      <a href={`${base}section-types/`} class="px-4 py-2 rounded-md bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Section Types 전체 보기</a>
+      <a href={`${base}extensions/`} class="px-4 py-2 rounded-md border border-ink-300 dark:border-ink-700 text-sm font-medium hover:bg-ink-100 dark:hover:bg-ink-800">Extensions 전체 보기</a>
+      <a href={`${base}playground/`} class="px-4 py-2 rounded-md border border-ink-300 dark:border-ink-700 text-sm font-medium hover:bg-ink-100 dark:hover:bg-ink-800">Playground (조합 실험)</a>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-4 mt-14">
+      <div class="rounded-xl border border-ink-200 dark:border-ink-700 p-5 bg-white dark:bg-ink-900">
+        <div class="text-3xl font-bold">12</div>
+        <div class="text-sm text-ink-500">Section Types</div>
+        <p class="text-xs mt-2 text-ink-600 dark:text-ink-300">메시지의 '의도'를 결정. 일반 데이터(ST1), PRACH(ST3), UE 단위(ST5), SRS(ST10) 등.</p>
+      </div>
+      <div class="rounded-xl border border-ink-200 dark:border-ink-700 p-5 bg-white dark:bg-ink-900">
+        <div class="text-3xl font-bold">30</div>
+        <div class="text-sm text-ink-500">Section Extensions</div>
+        <p class="text-xs mt-2 text-ink-600 dark:text-ink-300">Section에 덧붙어 빔 가중치·압축·비연속 PRB·UE-port 등 보강.</p>
+      </div>
+      <div class="rounded-xl border border-ink-200 dark:border-ink-700 p-5 bg-white dark:bg-ink-900">
+        <div class="text-3xl font-bold">{GLOSSARY.length}</div>
+        <div class="text-sm text-ink-500">용어</div>
+        <p class="text-xs mt-2 text-ink-600 dark:text-ink-300">PRB, DMRS, beamId, eAxC 등을 비유로 설명. 검색·필터링 가능.</p>
+      </div>
+      <div class="rounded-xl border border-ink-200 dark:border-ink-700 p-5 bg-white dark:bg-ink-900">
+        <div class="text-3xl font-bold">4</div>
+        <div class="text-sm text-ink-500">시각화 양식</div>
+        <p class="text-xs mt-2 text-ink-600 dark:text-ink-300">패킷 비트 레이아웃 · RB 점유 그리드 · 빔포밍 패턴 · 메시지 시퀀스.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-8">
+    <div class="flex items-baseline justify-between mb-4">
+      <h2 class="text-2xl font-semibold tracking-tight">자주 쓰는 Section Types</h2>
+      <a href={`${base}section-types/`} class="text-sm text-brand-600 hover:underline">전체 보기 →</a>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {featuredST.map((st) => <SectionTypeCard st={st} />)}
+    </div>
+  </section>
+
+  <section class="py-8">
+    <div class="flex items-baseline justify-between mb-4">
+      <h2 class="text-2xl font-semibold tracking-tight">대표 Extensions</h2>
+      <a href={`${base}extensions/`} class="text-sm text-brand-600 hover:underline">전체 보기 →</a>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {featuredSE.map((se) => <ExtensionCard se={se} />)}
+    </div>
+  </section>
+
+  <section class="py-10">
+    <div class="rounded-2xl bg-ink-50 dark:bg-ink-800/40 p-6 max-w-4xl">
+      <h2 class="text-xl font-semibold mb-2">참고 자료</h2>
+      <p class="text-sm text-ink-600 dark:text-ink-300 leading-relaxed">
+        본 사이트의 설명은 <code class="text-xs">O-RAN.WG4.TS.CUS.0-R005-v20.00</code> 스펙 문서를 기본으로 하고,
+        Techplayon의 fronthaul 가이드, Telecom Trainer의 O-RAN 인터페이스 설명, O-RAN Software Community 문서, 그리고 공개된 빔포밍 가중치 관련 특허 문서들의 일반 공개 자료를 참고해 작성되었습니다.
+        구체적인 비트 폭이나 필드 의미는 스펙 본문을 최종 출처로 삼아야 합니다. 각 페이지의 "📖 스펙 원문" 섹션에서 원문 발췌를 바로 확인할 수 있습니다.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

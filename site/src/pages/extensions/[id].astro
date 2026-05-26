@@ -1,0 +1,221 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { markdownToHtml } from "../../lib/markdown";
+import WhyMatters from "../../components/WhyMatters.astro";
+import { getSEWhy } from "../../data/why-matters";
+import { SEIllustration } from "../../components/viz/Illustrations.tsx";
+import BitLayout from "../../components/viz/BitLayout.tsx";
+import RbGrid from "../../components/viz/RbGrid.tsx";
+import BeamView from "../../components/viz/BeamView.tsx";
+import MessageSequence from "../../components/viz/MessageSequence.tsx";
+import { SECTION_EXTENSIONS, SECTION_TYPES, getSectionExtensionMeta, getSectionTypeMeta } from "../../data/curated";
+import sectionExtensions from "../../data/section-extensions.json";
+import { buildScenarioForExtension } from "../../lib/scenarios";
+import { getSENarrative } from "../../data/narratives";
+
+export async function getStaticPaths() {
+  return SECTION_EXTENSIONS.map((s) => ({ params: { id: String(s.id) } }));
+}
+
+const { id } = Astro.params;
+const seId = Number(id);
+const meta = getSectionExtensionMeta(seId);
+if (!meta) throw new Error(`Section Extension ${id} metadata not found`);
+const raw = (sectionExtensions as any[]).find((s) => s.extId === seId);
+const scenario = buildScenarioForExtension(seId);
+const narrative = getSENarrative(seId);
+const why = getSEWhy(seId);
+const stColors = Object.fromEntries(SECTION_TYPES.map((s) => [s.id, s.color]));
+const seColors = Object.fromEntries(SECTION_EXTENSIONS.map((s) => [s.id, s.color]));
+const base = import.meta.env.BASE_URL;
+const specHtml = raw?.rawMarkdown ? markdownToHtml(raw.rawMarkdown) : "";
+---
+
+<BaseLayout title={`SE${seId} · ${meta.name}`} description={meta.shortPurpose}>
+  <nav class="text-xs text-ink-500 mb-2">
+    <a href={`${base}extensions/`} class="hover:underline">Section Extensions</a> / <span class="font-mono">SE{seId}</span>
+  </nav>
+
+  <header class="mb-8 pb-6 border-b border-ink-200 dark:border-ink-700">
+    <div class="flex flex-wrap items-center gap-2 mb-2">
+      <span class="font-mono text-xs px-2 py-0.5 rounded font-semibold" style={`background:${meta.color}1f;color:${meta.color}`}>SE{seId}</span>
+      {meta.tags.map((t) => (
+        <span class="text-[10px] font-mono px-1.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-500">#{t}</span>
+      ))}
+    </div>
+    <h1 class="text-3xl font-bold tracking-tight">Section Extension {seId} — {meta.name}</h1>
+    <p class="text-ink-500 mt-1">{meta.shortPurpose}</p>
+    {narrative ? (
+      <div class="mt-5 rounded-xl bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 p-4">
+        <div class="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300 mb-1">TL;DR</div>
+        <p class="text-base leading-relaxed">{narrative.oneLine}</p>
+      </div>
+    ) : (
+      <div class="mt-5 rounded-xl bg-brand-50 dark:bg-brand-900/20 border-l-4 border-brand-500 p-4">
+        <div class="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300 mb-1">TL;DR</div>
+        <p class="text-base leading-relaxed">{meta.intent}</p>
+      </div>
+    )}
+    <p class="mt-3 text-sm text-ink-600 dark:text-ink-300">
+      적용 대상 Section Types:
+      {meta.appliesToSectionTypes.map((id) => (
+        <a href={`${base}section-types/${id}/`} class="ml-1 underline-offset-2 hover:underline font-semibold" style={`color:${stColors[id]}`}>ST{id}</a>
+      ))}
+    </p>
+  </header>
+
+  <article class="space-y-12">
+    <section>
+      <h2 class="text-2xl font-semibold mb-3">한눈에 보기 — 이게 없으면 / 있으면</h2>
+      <SEIllustration id={seId} client:visible />
+    </section>
+
+    {why ? <WhyMatters why={why} /> : null}
+
+    {narrative ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-3">💬 비유로 이해하기</h2>
+        <div class="rounded-xl border-l-4 border-amber-400 bg-amber-50 dark:bg-amber-900/10 p-4">
+          <p class="text-base leading-relaxed">{narrative.analogy}</p>
+        </div>
+      </section>
+    ) : null}
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-3">무슨 일을 하나요?</h2>
+      <div class="prose-doc text-[15px]">
+        {(narrative?.whatItIs ?? meta.intent).split("\n\n").map((p) => <p>{p}</p>)}
+      </div>
+    </section>
+
+    {narrative && narrative.whenUsed.length > 0 ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-3">언제 사용되나요?</h2>
+        <ul class="list-disc pl-6 space-y-2 text-[15px] leading-relaxed">
+          {narrative.whenUsed.map((s) => <li>{s}</li>)}
+        </ul>
+      </section>
+    ) : null}
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-2">메시지 비트 레이아웃</h2>
+      <p class="text-sm text-ink-600 dark:text-ink-300 mb-3 leading-relaxed">
+        Section 헤더의 ef=1 비트가 켜진 다음, 이 Extension이 줄을 이어 옵니다. extType 필드로 어떤 SE인지 구분합니다.
+      </p>
+      <BitLayout fields={scenario.bitLayout} caption={scenario.bitCaption} client:load />
+    </section>
+
+    {(meta.affects.includes("beamforming") || meta.affects.includes("antenna")) ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-2">빔포밍에 미치는 영향</h2>
+        <p class="text-sm text-ink-600 dark:text-ink-300 mb-3 leading-relaxed">
+          이 Extension이 적용된 후의 빔 패턴 예시입니다. 슬라이더를 만져보면 파라미터가 안테나 어레이에 어떤 식으로 작용하는지 직관적으로 보입니다.
+        </p>
+        <BeamView
+          numAntennas={scenario.beam.N}
+          steerDeg={scenario.beam.steer}
+          nullDegs={scenario.beam.nulls}
+          taperDb={scenario.beam.taper}
+          ues={scenario.beam.ues}
+          client:load
+          caption={scenario.beamCaption}
+        />
+      </section>
+    ) : null}
+
+    {(meta.affects.includes("prb-allocation") || meta.affects.includes("frequency")) ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-2">자원 점유 효과 (RB 그리드)</h2>
+        <p class="text-sm text-ink-600 dark:text-ink-300 mb-3 leading-relaxed">
+          이 Extension이 자원 할당 패턴을 어떻게 바꾸는지 보여줍니다.
+        </p>
+        <RbGrid sections={scenario.rbSections} client:load caption={scenario.rbCaption} />
+      </section>
+    ) : null}
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-2">DU ↔ RU 메시지 흐름</h2>
+      <MessageSequence steps={scenario.sequence} stColors={stColors} seColors={seColors} client:load />
+    </section>
+
+    {narrative && narrative.payload.length > 0 ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-3">페이로드 필드 풀이</h2>
+        <div class="overflow-x-auto rounded-lg border border-ink-200 dark:border-ink-700">
+          <table class="w-full text-sm">
+            <thead class="bg-ink-100 dark:bg-ink-800 text-left">
+              <tr>
+                <th class="px-3 py-2">필드</th>
+                <th class="px-3 py-2">비트</th>
+                <th class="px-3 py-2">설명</th>
+              </tr>
+            </thead>
+            <tbody>
+              {narrative.payload.map((f) => (
+                <tr class="border-t border-ink-100 dark:border-ink-800 align-top">
+                  <td class="px-3 py-2 font-mono whitespace-nowrap">{f.name}</td>
+                  <td class="px-3 py-2 font-mono text-xs text-ink-500 whitespace-nowrap">{f.bits ?? "—"}</td>
+                  <td class="px-3 py-2">{f.plain}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ) : null}
+
+    {narrative && narrative.pairWith.length > 0 ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-3">어떤 Section Type과 짝지어지나요?</h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {narrative.pairWith.map((pw) => {
+            const stMeta = getSectionTypeMeta(pw.stId);
+            if (!stMeta) return null;
+            return (
+              <a href={`${base}section-types/${pw.stId}/`} class="rounded-lg border border-ink-200 dark:border-ink-700 p-3 bg-white dark:bg-ink-900 hover:shadow-md transition">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="font-mono text-xs px-1.5 py-0.5 rounded font-semibold" style={`background:${stMeta.color}1f;color:${stMeta.color}`}>ST{pw.stId}</span>
+                  <span class="font-semibold text-sm">{stMeta.name}</span>
+                </div>
+                <p class="text-sm text-ink-600 dark:text-ink-300">{pw.why}</p>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    ) : null}
+
+    {narrative && narrative.workedExample ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-3">실제 예시</h2>
+        <div class="rounded-xl bg-ink-50 dark:bg-ink-800/40 border border-ink-200 dark:border-ink-700 p-4">
+          <p class="text-[15px] leading-relaxed">{narrative.workedExample}</p>
+        </div>
+      </section>
+    ) : null}
+
+    {narrative && narrative.pitfalls.length > 0 ? (
+      <section>
+        <h2 class="text-2xl font-semibold mb-3">⚠️ 흔한 함정</h2>
+        <ul class="space-y-3">
+          {narrative.pitfalls.map((p) => (
+            <li class="rounded-lg border-l-4 border-amber-400 bg-amber-50 dark:bg-amber-900/10 p-3 text-[15px] leading-relaxed">
+              {p}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ) : null}
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-3">📖 스펙 원문 (참조)</h2>
+      <p class="text-xs text-ink-500 mb-2 font-mono">§ {raw?.headingNumber} · SE{seId}: {raw?.title}</p>
+      <details class="rounded-lg border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-900" open>
+        <summary class="cursor-pointer px-4 py-3 font-medium text-sm">접기/펼치기 (기본 펼침)</summary>
+        <div class="px-4 pb-4 max-h-[60vh] overflow-auto">
+          <div class="prose-doc" set:html={specHtml}></div>
+        </div>
+      </details>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Sidebar from "../components/Sidebar.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "O-RAN WG4 CUS-plane Section Type & Extension Explorer" } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="ko" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>{title}</title>
+    <script is:inline>
+      // Theme bootstrap (avoid flash)
+      try {
+        const t = localStorage.getItem("theme");
+        if (t === "dark" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body class="min-h-full">
+    <Header />
+    <div class="flex max-w-[1800px] mx-auto px-4 lg:px-8 gap-6">
+      <Sidebar />
+      <main class="flex-1 min-w-0 py-8">
+        <slot />
+      </main>
+    </div>
+    <footer class="border-t border-ink-200 dark:border-ink-700 mt-16">
+      <div class="max-w-[1800px] mx-auto px-4 lg:px-8 py-6 text-sm text-ink-500">
+        Built from <code>O-RAN.WG4.TS.CUS v20.00</code>. Visualizations are for educational use.
+      </div>
+    </footer>
+  </body>
+</html>

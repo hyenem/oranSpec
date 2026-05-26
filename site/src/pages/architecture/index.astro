@@ -1,0 +1,137 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ArchitectureDiagram from "../../components/viz/ArchitectureDiagram.tsx";
+import MessageSequence from "../../components/viz/MessageSequence.tsx";
+import RbGrid from "../../components/viz/RbGrid.tsx";
+import { SECTION_TYPES, SECTION_EXTENSIONS } from "../../data/curated";
+
+const stColors = Object.fromEntries(SECTION_TYPES.map((s) => [s.id, s.color]));
+const seColors = Object.fromEntries(SECTION_EXTENSIONS.map((s) => [s.id, s.color]));
+const base = import.meta.env.BASE_URL;
+
+const dlFlow = [
+  { from: "O-DU" as const, to: "O-RU" as const, label: "C-plane: 다음 슬롯 스케줄 통보", st: 1, ses: [1, 6], note: "어느 PRB/심볼/UE/빔으로 보낼지 미리 선언" },
+  { from: "O-DU" as const, to: "O-RU" as const, label: "U-plane: 사용자 IQ 데이터", st: 1, note: "C-plane이 잡은 좌표에 들어갈 IQ 샘플" },
+  { from: "O-RU" as const, to: "UE" as const, label: "OTA 다운링크 전송", st: 1, note: "안테나가 빔을 형성해 UE에게 무선 송신" },
+  { from: "UE" as const, to: "O-RU" as const, label: "OTA: HARQ ACK/NACK", st: 9, note: "UE가 잘 받았는지 응답" },
+];
+
+const ulFlow = [
+  { from: "O-DU" as const, to: "O-RU" as const, label: "C-plane: UL 그랜트 통보", st: 1, ses: [], note: "UE가 PUSCH를 보낼 PRB·심볼·빔 사전 통보" },
+  { from: "UE" as const, to: "O-RU" as const, label: "OTA 업링크", st: 1, note: "UE가 PUSCH로 데이터 송신 (DMRS 포함)" },
+  { from: "O-RU" as const, to: "O-DU" as const, label: "U-plane: 수신 IQ", st: 1, note: "RU가 수신한 IQ를 DU로 올림" },
+  { from: "O-RU" as const, to: "O-DU" as const, label: "C-plane ST 6: 채널 정보 (ueId별)", st: 6, note: "특정 UE의 채널 정보를 DU와 공유" },
+];
+
+const guidedScenario = [
+  { id: "guard-1", label: "ST0 guard", color: "#9ca3af", symStart: 0, symLen: 2, prbStart: 0, prbLen: 24 },
+  { id: "pdsch-A", label: "ST1 → UE-A", color: "#3b82f6", symStart: 2, symLen: 10, prbStart: 0, prbLen: 8, meta: { beamId: "12" } },
+  { id: "pdsch-B", label: "ST1 → UE-B", color: "#10b981", symStart: 2, symLen: 10, prbStart: 8, prbLen: 8, meta: { beamId: "21" } },
+  { id: "pdsch-C", label: "ST1 → UE-C", color: "#f59e0b", symStart: 2, symLen: 10, prbStart: 16, prbLen: 8, meta: { beamId: "30" } },
+  { id: "guard-2", label: "ST0 guard (전환 갭)", color: "#9ca3af", symStart: 12, symLen: 2, prbStart: 0, prbLen: 24 },
+];
+---
+
+<BaseLayout title="아키텍처 개요 · O-RAN Spec Explorer">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight">아키텍처 개요</h1>
+    <p class="mt-2 text-ink-600 dark:text-ink-300 max-w-3xl leading-relaxed">
+      Section Type/Extension은 결국 <b>O-DU와 O-RU 사이에 흐르는 컨트롤 메시지</b>입니다.
+      그래서 그 둘이 어떻게 연결되어 있고, 한 슬롯에서 어떤 일이 벌어지는지를 먼저 이해하면 나머지가 훨씬 쉽게 와 닿습니다.
+    </p>
+  </header>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-3">한 장으로 보는 O-RAN Fronthaul</h2>
+    <p class="text-sm text-ink-600 dark:text-ink-300 max-w-3xl mb-4 leading-relaxed">
+      O-RAN은 전통적으로 한 박스에 묶여 있던 기지국 기능을 <b>O-DU</b>(베이스밴드)와 <b>O-RU</b>(무선) 둘로 분리하고,
+      그 사이를 <b>표준 오픈 인터페이스</b>로 연결하자는 운동입니다. 그래야 제조사가 달라도 섞어 쓸 수 있어요.
+      이 인터페이스(Open Fronthaul) 위에 네 가지 평면(C/U/S/M)이 흐릅니다.
+    </p>
+    <ArchitectureDiagram client:load />
+    <p class="text-xs text-ink-500 mt-2">위 박스/화살표를 클릭하면 우측 패널에 각 구성요소 설명이 뜹니다.</p>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-3">"슬롯 하나 동안" 무슨 일이 벌어지나요?</h2>
+    <p class="text-sm text-ink-600 dark:text-ink-300 max-w-3xl mb-4 leading-relaxed">
+      5G 무선 자원은 <b>슬롯</b>(보통 14 OFDM 심볼) 단위로 잘립니다. 한 슬롯이 진행되는 짧은 시간 동안
+      DU↔RU 사이에는 정해진 메시지들이 빠르게 오갑니다. 아래는 매우 단순화한 다운링크/업링크 두 시나리오입니다.
+    </p>
+
+    <div class="grid lg:grid-cols-2 gap-4">
+      <div>
+        <h3 class="font-semibold mb-2">다운링크: UE에게 데이터 보내기 (예: YouTube 스트림)</h3>
+        <MessageSequence steps={dlFlow} stColors={stColors} seColors={seColors} title="DL 슬롯 흐름" client:load />
+        <ol class="mt-3 list-decimal pl-5 text-sm space-y-1 text-ink-700 dark:text-ink-200 leading-relaxed">
+          <li>O-DU가 채널 정보로 빔/PRB/MCS를 결정하고 <a href={`${base}section-types/1/`} class="text-brand-600 hover:underline">ST 1</a> C-plane으로 통보 (필요 시 SE 1로 빔 가중치도 동봉).</li>
+          <li>같은 좌표에 들어갈 사용자 IQ 데이터를 U-plane으로 송신.</li>
+          <li>O-RU가 안테나로 OTA 송신. 빔은 ST 1이 지정한 beamId/weights 그대로.</li>
+          <li>UE가 HARQ ACK/NACK으로 응답 (이건 OTA, 프론트홀이 아님).</li>
+        </ol>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-2">업링크: UE의 PUSCH 수신 + 채널 보고</h3>
+        <MessageSequence steps={ulFlow} stColors={stColors} seColors={seColors} title="UL 슬롯 흐름" client:load />
+        <ol class="mt-3 list-decimal pl-5 text-sm space-y-1 text-ink-700 dark:text-ink-200 leading-relaxed">
+          <li>O-DU가 UL 그랜트를 ST 1 C-plane으로 미리 RU에 통보.</li>
+          <li>UE가 정해진 자원에 PUSCH를 송신 (DMRS 포함).</li>
+          <li>O-RU가 수신한 IQ를 U-plane으로 O-DU에 전달.</li>
+          <li>O-RU 또는 O-DU가 DMRS로 채널을 추정하고 <a href={`${base}section-types/6/`} class="text-brand-600 hover:underline">ST 6</a>로 채널 정보 공유.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-3">한 슬롯의 RB 그리드 — 메시지가 어떻게 자원을 점유하나</h2>
+    <p class="text-sm text-ink-600 dark:text-ink-300 max-w-3xl mb-4 leading-relaxed">
+      RB 그리드는 <b>가로축이 시간(OFDM 심볼)</b>, <b>세로축이 주파수(PRB)</b>인 격자입니다.
+      Section Type 메시지는 "이 직사각형 영역은 내 것"이라고 선언하는 식으로 동작합니다.
+      아래는 한 슬롯에 세 UE에게 PDSCH를 보내고, 슬롯 시작에 가드(ST 0), 마지막 심볼에 SRS(ST 10)를 두는 일반적 패턴.
+    </p>
+    <RbGrid sections={guidedScenario} caption="ST 0 가드 · ST 1 세 UE 동시 PDSCH · ST 10 SRS — 한 슬롯에 보통 여러 ST가 공존" client:load />
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-3">왜 'Section'이라고 부르나요?</h2>
+    <div class="prose-doc max-w-3xl">
+      <p>
+        C-plane 메시지 한 통은 보통 여러 개의 작은 단위로 쪼개져 있습니다. 그 단위 하나가 <b>Section</b>입니다.
+        각 Section은 (시간 범위, 주파수 범위, 빔/UE 정보)를 표현하는 작은 직사각형이고,
+        Section 헤더의 <code>sectionType</code> 필드(0~11)가 그 의도를 결정합니다.
+      </p>
+      <p>
+        Section 뒤에 <code>ef=1</code> 비트가 켜져 있으면 <b>Section Extension</b>(SE 1~30)이 줄줄이 따라옵니다.
+        SE는 가중치, 압축, 비연속 PRB, UE 그룹, 차원 축소 같은 "추가 지시"들이에요. 마치 큐 시트 항목 옆에 붙은 포스트잇.
+      </p>
+      <p>
+        그래서 신입사원 입장에서 기억할 핵심은:
+      </p>
+      <ul>
+        <li><b>메시지의 의도 = Section Type</b> (예: ST 1 = 일반 PDSCH/PUSCH)</li>
+        <li><b>의도 + 추가 지시 = Section + Section Extension</b> (예: ST 1 + SE 1 = 빔 가중치 첨부한 PDSCH)</li>
+        <li><b>자원의 좌표 = (startSymbol, numSymbol, startPrbc, numPrbc)</b></li>
+        <li><b>대상 = beamId(빔 인덱스) 또는 ueId(UE 식별자)</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-semibold mb-3">다음으로 볼 만한 페이지</h2>
+    <div class="grid sm:grid-cols-3 gap-4">
+      <a href={`${base}concepts/`} class="rounded-xl border border-ink-200 dark:border-ink-700 p-4 bg-white dark:bg-ink-900 hover:shadow-md transition">
+        <div class="font-semibold mb-1">개념·용어집</div>
+        <p class="text-sm text-ink-600 dark:text-ink-300">PRB, beamId, DMRS, eAxC 등 처음 보는 약어를 비유로 설명.</p>
+      </a>
+      <a href={`${base}section-types/1/`} class="rounded-xl border border-ink-200 dark:border-ink-700 p-4 bg-white dark:bg-ink-900 hover:shadow-md transition">
+        <div class="font-semibold mb-1">Section Type 1 (가장 흔함)</div>
+        <p class="text-sm text-ink-600 dark:text-ink-300">PDSCH/PUSCH 스케줄링. 5G 트래픽의 90% 이상이 통과.</p>
+      </a>
+      <a href={`${base}playground/`} class="rounded-xl border border-ink-200 dark:border-ink-700 p-4 bg-white dark:bg-ink-900 hover:shadow-md transition">
+        <div class="font-semibold mb-1">Playground</div>
+        <p class="text-sm text-ink-600 dark:text-ink-300">Section Type + Extensions 조합을 만지고 4가지 뷰가 어떻게 바뀌는지.</p>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

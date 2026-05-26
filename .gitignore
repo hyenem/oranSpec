@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Large source spec
+*.docx
+
+# Node
+node_modules/
+**/node_modules/
+
+# Build output
+site/dist/
+dist/
+
+# Logs / env
+*.log
+.env
+.env.local

@@ -1,0 +1,55 @@
+---
+const base = import.meta.env.BASE_URL;
+const nav = [
+  { href: "", label: "홈" },
+  { href: "concepts", label: "개념·용어집" },
+  { href: "architecture", label: "아키텍처" },
+  { href: "section-types", label: "Section Types" },
+  { href: "extensions", label: "Extensions" },
+  { href: "fields", label: "Fields" },
+  { href: "simulator", label: "🎛 시뮬레이터" },
+];
+const current = Astro.url.pathname.replace(base, "").replace(/^\//, "").split("/")[0] ?? "";
+---
+
+<header class="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-ink-900/80 border-b border-ink-200 dark:border-ink-700">
+  <div class="max-w-[1500px] mx-auto px-4 lg:px-8 h-14 flex items-center gap-6">
+    <a href={base} class="font-semibold tracking-tight text-lg">
+      <span class="text-brand-600">O-RAN</span> Spec Explorer
+    </a>
+    <nav class="flex gap-1 text-sm">
+      {nav.map((n) => {
+        const href = n.href ? `${base}${n.href}/` : base;
+        const active = current === n.href;
+        return (
+          <a
+            href={href}
+            class={`px-3 py-1.5 rounded-md transition ${active ? "bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300" : "hover:bg-ink-100 dark:hover:bg-ink-800"}`}
+          >
+            {n.label}
+          </a>
+        );
+      })}
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <button
+        id="theme-toggle"
+        class="p-2 rounded-md hover:bg-ink-100 dark:hover:bg-ink-800 text-sm"
+        aria-label="Toggle theme"
+      >
+        <span class="hidden dark:inline">☀</span>
+        <span class="dark:hidden">☾</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  const btn = document.getElementById("theme-toggle");
+  btn?.addEventListener("click", () => {
+    const isDark = document.documentElement.classList.toggle("dark");
+    try {
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    } catch {}
+  });
+</script>

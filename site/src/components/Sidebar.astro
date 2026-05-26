@@ -1,0 +1,52 @@
+---
+import { SECTION_TYPES, SECTION_EXTENSIONS } from "../data/curated";
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+---
+
+<aside class="hidden lg:block w-64 shrink-0 py-8">
+  <div class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-auto pr-2 text-sm space-y-6">
+    <section>
+      <h3 class="font-semibold mb-2 text-ink-500 uppercase tracking-wide text-xs">Section Types</h3>
+      <ul class="space-y-0.5">
+        {SECTION_TYPES.map((s) => {
+          const href = `${base}section-types/${s.id}/`;
+          const active = path === href || path === href.replace(/\/$/, "");
+          return (
+            <li>
+              <a
+                href={href}
+                class={`flex items-center gap-2 px-2 py-1 rounded transition ${active ? "bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300" : "hover:bg-ink-100 dark:hover:bg-ink-800"}`}
+              >
+                <span class="w-2 h-2 rounded-full" style={`background:${s.color}`}></span>
+                <span class="font-mono text-xs w-8 shrink-0">ST{s.id}</span>
+                <span class="truncate">{s.name}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+    <section>
+      <h3 class="font-semibold mb-2 text-ink-500 uppercase tracking-wide text-xs">Section Extensions</h3>
+      <ul class="space-y-0.5">
+        {SECTION_EXTENSIONS.map((s) => {
+          const href = `${base}extensions/${s.id}/`;
+          const active = path === href || path === href.replace(/\/$/, "");
+          return (
+            <li>
+              <a
+                href={href}
+                class={`flex items-center gap-2 px-2 py-1 rounded transition ${active ? "bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300" : "hover:bg-ink-100 dark:hover:bg-ink-800"}`}
+              >
+                <span class="w-2 h-2 rounded-full" style={`background:${s.color}`}></span>
+                <span class="font-mono text-xs w-8 shrink-0">SE{s.id}</span>
+                <span class="truncate">{s.name}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  </div>
+</aside>

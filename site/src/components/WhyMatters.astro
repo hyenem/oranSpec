@@ -1,0 +1,37 @@
+---
+/**
+ * "왜 쓰이는지" 직관 박스.
+ * 신입사원 시각으로 "이 Section Type/Extension이 없으면 망 운영이 어떻게 깨지는가"를 보여주는 시각적 비포·애프터 카드.
+ */
+interface Why {
+  trigger: string;       // 어떤 상황에서 발생하나
+  withoutThis: string;   // 이 메시지가 없으면 어떻게 되나
+  withThis: string;      // 이 메시지가 있으면 어떻게 되나
+  realImpact: string;    // 사용자/시스템 입장에서 결과
+}
+interface Props {
+  why: Why;
+}
+const { why } = Astro.props;
+---
+
+<section class="rounded-2xl border-2 border-brand-200 dark:border-brand-900/40 bg-gradient-to-br from-brand-50 via-white to-white dark:from-brand-900/10 dark:via-ink-900 dark:to-ink-900 p-6 my-6">
+  <div class="text-xs font-mono uppercase tracking-wide text-brand-700 dark:text-brand-300 mb-2">왜 이게 있나요?</div>
+  <h3 class="text-xl font-semibold mb-4">{why.trigger}</h3>
+
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="rounded-xl bg-red-50 dark:bg-red-900/10 border-l-4 border-red-400 p-4">
+      <div class="text-xs font-semibold uppercase tracking-wide text-red-700 dark:text-red-400 mb-2">❌ 이 메시지가 없다면</div>
+      <p class="text-sm leading-relaxed">{why.withoutThis}</p>
+    </div>
+    <div class="rounded-xl bg-emerald-50 dark:bg-emerald-900/10 border-l-4 border-emerald-400 p-4">
+      <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400 mb-2">✅ 이 메시지가 있으면</div>
+      <p class="text-sm leading-relaxed">{why.withThis}</p>
+    </div>
+  </div>
+
+  <div class="mt-4 rounded-lg bg-ink-50 dark:bg-ink-800/40 p-3">
+    <div class="text-xs font-semibold uppercase tracking-wide text-ink-500 mb-1">실제 사용자/시스템에 미치는 영향</div>
+    <p class="text-sm leading-relaxed">{why.realImpact}</p>
+  </div>
+</section>

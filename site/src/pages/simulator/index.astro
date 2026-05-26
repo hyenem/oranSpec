@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Simulator from "../../components/viz/Simulator.tsx";
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="시뮬레이터 · O-RAN Spec Explorer">
+  <header class="mb-6">
+    <nav class="text-xs text-ink-500 mb-2">
+      <a href={base} class="hover:underline">홈</a> / 시뮬레이터
+    </nav>
+    <h1 class="text-3xl font-bold tracking-tight">메시지 시뮬레이터</h1>
+    <p class="mt-2 text-ink-600 dark:text-ink-300 max-w-3xl leading-relaxed">
+      Section Type을 고르면 그 ST의 모든 필드가 펼쳐집니다. 각 필드 옆 그림이 그 필드가 무엇을 의미하는지 즉시 보여줘요. 필요한 Section Extension은 그 다음에 부착, SE 필드도 같은 방식으로 모두 시각화됩니다.
+    </p>
+  </header>
+  <Simulator client:load />
+</BaseLayout>
