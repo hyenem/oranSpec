@@ -89,9 +89,9 @@ export default function Playground() {
         out.push({
           from: "O-RU",
           to: "O-DU",
-          label: "ST9 ACK/NACK",
-          st: 9,
-          note: "SE22로 응답을 요청했기 때문에 ST9 응답이 발생",
+          label: "ST8 ACK/NACK",
+          st: 8,
+          note: "SE22로 응답을 요청했기 때문에 ST8(ACK/NACK feedback) 응답이 발생",
         });
       }
       if (id === 27 || id === 28) {

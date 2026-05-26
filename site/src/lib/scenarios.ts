@@ -179,8 +179,8 @@ export function buildScenarioForSectionType(stId: number): SectionTypeScenario {
       rbSections = [];
       rbCaption = "ST4는 자원 점유보다 컨트롤 명령에 가깝습니다.";
       sequence = [
-        { from: "O-DU", to: "O-RU", label: "C-Plane ST4 (slot cmd)", st: 4, ses: [22], note: "SE22로 ACK/NACK 요청" },
-        { from: "O-RU", to: "O-DU", label: "C-Plane ST9 (ACK)", st: 9, note: "명령 수신 확인" },
+        { from: "O-DU", to: "O-RU", label: "C-Plane ST4 (slot cmd)", st: 4, ses: [22], note: "SE22 또는 native ackNackReqId로 ACK 요청" },
+        { from: "O-RU", to: "O-DU", label: "C-Plane ST8 (ACK/NACK)", st: 8, note: "명령 수신 확인 (ackId/nackId echo)" },
       ];
       break;
     }
@@ -441,7 +441,7 @@ export function buildScenarioForExtension(seId: number): ExtensionScenario {
       ];
       sequence = [
         { from: "O-DU", to: "O-RU", label: "Host (ST4) + SE22", st: 4, ses: [22], note: "응답 요청을 동봉" },
-        { from: "O-RU", to: "O-DU", label: "ST9 ACK/NACK", st: 9, note: "동일한 ackNackReqId로 응답" },
+        { from: "O-RU", to: "O-DU", label: "ST8 ACK/NACK", st: 8, note: "동일한 ackNackReqId가 ackId/nackId로 echo" },
       ];
       break;
     }

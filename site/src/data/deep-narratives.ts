@@ -680,8 +680,7 @@ export const SE_DEEP: Record<number, DeepEntry> = {
       {
         kind: "fieldTable",
         rows: [
-          { name: "nullLayerInd", bits: "4", plain: "널을 만들 레이어 인덱스 (MU-MIMO에서 다른 UE의 레이어).", example: "1" },
-          { name: "antPortBitmap", bits: "16", plain: "이 nulling이 적용될 안테나 포트.", example: "0xFFFF (모든 포트)" },
+          { name: "nullLayerInd", bits: "8", plain: "널을 만들 레이어 인덱스 비트마스크 (spec §7.7.14의 유일한 파라미터).", example: "0b00000010 — 레이어 1만 널" },
         ],
       },
       {
@@ -701,22 +700,22 @@ export const SE_DEEP: Record<number, DeepEntry> = {
         flavor: "tldr",
         title: "5초 요약",
         body:
-          "SE 22는 '이 명령에 대해 RU가 ACK/NACK를 돌려달라'고 표시합니다. 거의 항상 ST 4(슬롯 컨트롤)와 짝.",
+          "SE 22는 '이 명령에 대해 RU가 ACK/NACK를 돌려달라'고 표시합니다. spec §7.7.22: O-DU → O-RU 방향의 모든 SE 지원 ST에 첨부 가능 (ST 0/1/3/4/5/10/11). 응답은 **ST 8 (ACK/NACK feedback)** 으로 옵니다.",
       },
       { kind: "heading", level: 2, text: "🤔 왜 모든 명령에 응답이 필요하지 않나" },
       {
         kind: "paragraph",
         text:
-          "ST 1처럼 매 슬롯 자주 흐르는 메시지에 일일이 응답을 받으면 fronthaul이 응답으로 가득 차서 지연이 늘어납니다. 그래서 일반 데이터 채널 스케줄링은 'fire-and-forget'(응답 없음). 다만 'LBT 결과 적용'이나 '안테나 모드 변경' 같은 ST 4 명령은 잘못 적용되면 시스템이 망가지므로 응답을 받습니다. SE 22가 그 응답을 트리거하는 표시입니다.",
+          "ST 1처럼 매 슬롯 자주 흐르는 메시지에 일일이 응답을 받으면 fronthaul이 응답으로 가득 차서 지연이 늘어납니다. 그래서 일반 데이터 채널 스케줄링은 'fire-and-forget'(응답 없음). 다만 'LBT 결과 적용'이나 '안테나 모드 변경' 같은 ST 4 명령은 잘못 적용되면 시스템이 망가지므로 응답을 받습니다. SE 22가 그 응답을 트리거하는 표시입니다. (ST 4의 경우 native ackNackReqId 필드로도 동일한 동작이 가능합니다.)",
       },
       { kind: "heading", level: 2, text: "🔁 요청-응답 사이클" },
       {
         kind: "steps",
         items: [
-          { who: "O-DU", what: "ST 4 cmd 작성. ackNackId=42를 SE 22에 넣어 첨부.", why: "응답에서 매칭할 수 있는 키." },
-          { who: "O-RU", what: "명령 수신 후 적용. 성공이면 ackNack=1, 실패면 ackNack=0 + reasonCode.", why: "원자적 확인." },
-          { who: "O-RU", what: "ST 9 메시지 송신 (ackNackId=42).", why: "DU의 워치독이 매칭." },
-          { who: "O-DU", what: "타임아웃 안에 ST 9가 안 오면 NACK으로 간주하고 재시도 / 알람.", why: "신뢰성 보장." },
+          { who: "O-DU", what: "ST 4 cmd 작성. ackNackReqId=42를 SE 22에 넣어 첨부.", why: "응답에서 매칭할 수 있는 키." },
+          { who: "O-RU", what: "명령 수신 후 적용. 성공이면 ackNack=1, 실패면 ackNack=0.", why: "원자적 확인." },
+          { who: "O-RU", what: "ST 8 메시지 송신 (ackId=42 또는 nackId=42).", why: "DU의 워치독이 매칭." },
+          { who: "O-DU", what: "타임아웃 안에 ST 8이 안 오면 NACK으로 간주하고 재시도 / 알람.", why: "신뢰성 보장." },
         ],
       },
       {
@@ -724,7 +723,7 @@ export const SE_DEEP: Record<number, DeepEntry> = {
         flavor: "warn",
         title: "⚠️ 워치독 필수",
         body:
-          "SE 22를 보내놓고 응답을 안 기다리면 의미가 없습니다. 보통 SE 22 송신 → 100µs ~ 1ms 안에 ST 9를 기대하고, 타임아웃 시 재시도 / NACK 처리하는 상태기계가 DU 측에 필요.",
+          "SE 22를 보내놓고 응답을 안 기다리면 의미가 없습니다. 보통 SE 22 송신 → 100µs ~ 1ms 안에 ST 8을 기대하고, 타임아웃 시 재시도 / NACK 처리하는 상태기계가 DU 측에 필요. (ST 9가 아니라 ST 8입니다 — ST 9는 SINR 보고용.)",
       },
     ],
   },

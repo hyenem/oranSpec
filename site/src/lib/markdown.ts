@@ -19,12 +19,117 @@ const ALLOWED_INLINE_TAGS = new Set([
   "mark",
   "small",
   "abbr",
+  "span",
+]);
+
+// Block-level tags that pandoc emits for docx tables. These are passed through
+// verbatim (with attribute sanitization) instead of being escaped.
+const ALLOWED_BLOCK_TAGS = new Set([
+  "table",
+  "colgroup",
+  "col",
+  "thead",
+  "tbody",
+  "tfoot",
+  "tr",
+  "th",
+  "td",
+  "div",
+  "p",
+  "ul",
+  "ol",
+  "li",
+]);
+
+// Attributes kept on block-HTML pass-through. `style` is further filtered by
+// sanitizeStyle to a layout-only allowlist.
+const ALLOWED_ATTRS = new Set([
+  "style",
+  "colspan",
+  "rowspan",
+  "span",
+  "scope",
+  "align",
+  "valign",
+  "width",
+  "height",
+  "title",
+  "class",
+]);
+
+const ALLOWED_STYLE_PROPS = new Set([
+  "text-align",
+  "vertical-align",
+  "width",
+  "height",
+  "padding",
+  "padding-left",
+  "padding-right",
+  "padding-top",
+  "padding-bottom",
+  "font-weight",
+  "background",
+  "background-color",
 ]);
 
 function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string)
   );
+}
+
+function sanitizeStyle(value: string): string {
+  return value
+    .split(";")
+    .map((decl) => decl.trim())
+    .filter(Boolean)
+    .map((decl) => {
+      const idx = decl.indexOf(":");
+      if (idx < 0) return "";
+      const prop = decl.slice(0, idx).trim().toLowerCase();
+      const val = decl.slice(idx + 1).trim();
+      if (!ALLOWED_STYLE_PROPS.has(prop)) return "";
+      if (/url\s*\(|expression\s*\(|javascript:/i.test(val)) return "";
+      return `${prop}: ${val}`;
+    })
+    .filter(Boolean)
+    .join("; ");
+}
+
+function sanitizeAttrs(raw: string): string {
+  const out: string[] = [];
+  const re = /([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(raw)) !== null) {
+    const name = m[1].toLowerCase();
+    if (!ALLOWED_ATTRS.has(name)) continue;
+    const value = m[3] ?? m[4] ?? m[5] ?? "";
+    if (/^on/i.test(name)) continue;
+    const cleaned = name === "style" ? sanitizeStyle(value) : value;
+    if (!cleaned) continue;
+    out.push(`${name}="${escapeHtml(cleaned)}"`);
+  }
+  return out.length ? " " + out.join(" ") : "";
+}
+
+function sanitizeBlockHtml(html: string): string {
+  return html.replace(
+    /<\s*(\/?)\s*([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g,
+    (_, slash, tag, attrs) => {
+      const lower = tag.toLowerCase();
+      if (!ALLOWED_BLOCK_TAGS.has(lower) && !ALLOWED_INLINE_TAGS.has(lower)) return "";
+      if (slash) return `</${lower}>`;
+      const isSelfClosing = lower === "col" || lower === "br";
+      const cleanAttrs = sanitizeAttrs(attrs);
+      return isSelfClosing ? `<${lower}${cleanAttrs} />` : `<${lower}${cleanAttrs}>`;
+    }
+  );
+}
+
+function isBlockHtmlStart(line: string): string | null {
+  const m = /^\s*<\s*([a-zA-Z][a-zA-Z0-9]*)\b/.exec(line);
+  if (m && ALLOWED_BLOCK_TAGS.has(m[1].toLowerCase())) return m[1].toLowerCase();
+  return null;
 }
 
 function renderInline(s: string) {
@@ -123,6 +228,28 @@ export function markdownToHtml(md: string): string {
         i++;
       }
       out.push(renderTable(buf));
+      continue;
+    }
+
+    const blockTag = isBlockHtmlStart(line);
+    if (blockTag) {
+      const buf: string[] = [];
+      const openRe = new RegExp(`<\\s*${blockTag}\\b`, "gi");
+      const closeRe = new RegExp(`<\\s*/\\s*${blockTag}\\s*>`, "gi");
+      let depth = 0;
+      while (i < lines.length) {
+        const l = lines[i];
+        buf.push(l);
+        depth += (l.match(openRe) || []).length;
+        depth -= (l.match(closeRe) || []).length;
+        i++;
+        if (depth <= 0) break;
+      }
+      let html = sanitizeBlockHtml(buf.join("\n"));
+      if (blockTag === "table") {
+        html = `<div class="overflow-x-auto">${html}</div>`;
+      }
+      out.push(html);
       continue;
     }
 

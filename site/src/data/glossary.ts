@@ -67,7 +67,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     oneLine: "단말기 — 스마트폰, IoT 디바이스, FWA CPE 등",
     analogy: "공연장의 '관객 한 명'. 콘솔/스피커는 이 관객들이 잘 듣게 만들기 위해 움직임.",
     explain:
-      "UE는 기지국이 서빙하는 무선 단말입니다. RRC 시그널링으로 식별·연결 상태를 관리하지만, 프론트홀 레벨에서는 UE를 직접 다루지 않고 'ueId'라는 내부 핸들로 참조합니다.\n\nUE 단위로 자원을 할당하는 ST 5(ueId-BF), 채널 정보를 추적하는 ST 6, SRS를 트리거하는 ST 10 등이 UE를 명시적으로 다루는 메시지입니다.",
+      "UE는 기지국이 서빙하는 무선 단말입니다. RRC 시그널링으로 식별·연결 상태를 관리하지만, 프론트홀 레벨에서는 UE를 직접 다루지 않고 'ueId'라는 내부 핸들로 참조합니다.\n\nUE 단위로 자원을 할당하는 ST 5(ueId-BF), 채널 정보를 RU에 전달하는 ST 6, UE 단위 RRM 측정 보고(ST 10) 등이 UE를 명시적으로 다루는 메시지입니다.",
     relatedTo: ["ueid", "rnti", "section-type-5"],
     category: "ue",
   },
@@ -420,8 +420,8 @@ export const GLOSSARY: GlossaryEntry[] = [
     oneLine: "송수신단 사이의 채널 응답(H)을 측정/추정하는 과정",
     analogy: "음향팀이 'pink noise'를 틀어 좌석마다 음향이 어떻게 변하는지 측정하는 것.",
     explain:
-      "UE↔RU 사이 무선 채널은 시간·주파수에 따라 변하므로, 빔 가중치·MIMO 프리코더를 잘 계산하려면 채널을 알아야 합니다. UL에서는 SRS(ST 10)·DMRS(ST 11)로, DL에서는 UE 피드백/CSI로 얻습니다.\n\nST 6은 추정 결과(H 또는 압축본)를 O-DU↔O-RU 사이에 명시적으로 운반합니다.",
-    relatedTo: ["srs", "dmrs", "section-type-6", "section-type-10"],
+      "UE↔RU 사이 무선 채널은 시간·주파수에 따라 변하므로, 빔 가중치·MIMO 프리코더를 잘 계산하려면 채널을 알아야 합니다. UL에서는 SRS·PUSCH DMRS로, DL에서는 UE 피드백/CSI로 얻습니다. (스펙상 SRS는 일반적으로 ST 1로 스케줄되며, ST 10/11은 RRM 측정 보고/요청 메시지입니다.)\n\nST 6은 O-DU가 가진 UE-specific 채널 정보를 O-RU에 내려주는 메시지입니다.",
+    relatedTo: ["srs", "dmrs", "section-type-6"],
     category: "channel",
   },
   {
@@ -431,8 +431,8 @@ export const GLOSSARY: GlossaryEntry[] = [
     oneLine: "ACK/NACK 기반의 재전송 메커니즘 (PHY+MAC 결합)",
     analogy: "택배 영수증. 받지 못했으면 다시 보내달라고 요청.",
     explain:
-      "HARQ는 보통 MAC 레이어 메커니즘이지만, 프론트홀에서도 ACK/NACK 자체 시그널링이 필요할 때가 있습니다(ST 4 명령에 대한 ST 9 응답 등). SE 22가 이 ACK 요청을 첨부합니다.",
-    relatedTo: ["section-type-4", "section-type-9", "section-extension-22"],
+      "HARQ는 보통 MAC 레이어/Layer 1 (PUCCH) 메커니즘이라 프론트홀 CUS-plane 직접 다루지 않습니다. 다만 프론트홀 컨트롤 메시지의 적용 확인이 필요할 때는 SE 22(또는 ST 4의 native ackNackReqId)로 요청 → ST 8 (ACK/NACK feedback)으로 응답 받습니다.",
+    relatedTo: ["section-type-4", "section-type-8", "section-extension-22"],
     category: "feature",
   },
 ];

@@ -13,14 +13,14 @@ const dlFlow = [
   { from: "O-DU" as const, to: "O-RU" as const, label: "C-plane: 다음 슬롯 스케줄 통보", st: 1, ses: [1, 6], note: "어느 PRB/심볼/UE/빔으로 보낼지 미리 선언" },
   { from: "O-DU" as const, to: "O-RU" as const, label: "U-plane: 사용자 IQ 데이터", st: 1, note: "C-plane이 잡은 좌표에 들어갈 IQ 샘플" },
   { from: "O-RU" as const, to: "UE" as const, label: "OTA 다운링크 전송", st: 1, note: "안테나가 빔을 형성해 UE에게 무선 송신" },
-  { from: "UE" as const, to: "O-RU" as const, label: "OTA: HARQ ACK/NACK", st: 9, note: "UE가 잘 받았는지 응답" },
+  { from: "UE" as const, to: "O-RU" as const, label: "OTA: HARQ ACK/NACK (PUCCH)", note: "UE가 잘 받았는지 응답 — Layer 1/2, 프론트홀 CUS-plane 밖" },
 ];
 
 const ulFlow = [
   { from: "O-DU" as const, to: "O-RU" as const, label: "C-plane: UL 그랜트 통보", st: 1, ses: [], note: "UE가 PUSCH를 보낼 PRB·심볼·빔 사전 통보" },
   { from: "UE" as const, to: "O-RU" as const, label: "OTA 업링크", st: 1, note: "UE가 PUSCH로 데이터 송신 (DMRS 포함)" },
-  { from: "O-RU" as const, to: "O-DU" as const, label: "U-plane: 수신 IQ", st: 1, note: "RU가 수신한 IQ를 DU로 올림" },
-  { from: "O-RU" as const, to: "O-DU" as const, label: "C-plane ST 6: 채널 정보 (ueId별)", st: 6, note: "특정 UE의 채널 정보를 DU와 공유" },
+  { from: "O-RU" as const, to: "O-DU" as const, label: "U-plane: 수신 IQ", st: 1, note: "RU가 수신한 IQ를 DU로 올림 (DU에서 채널 추정)" },
+  { from: "O-RU" as const, to: "O-DU" as const, label: "(옵션) ST 9: post-EQ SINR 보고", st: 9, note: "DMRS-BF-EQ에서 RU 등화 후 SINR 보고" },
 ];
 
 const guidedScenario = [
@@ -71,13 +71,13 @@ const guidedScenario = [
         </ol>
       </div>
       <div>
-        <h3 class="font-semibold mb-2">업링크: UE의 PUSCH 수신 + 채널 보고</h3>
+        <h3 class="font-semibold mb-2">업링크: UE의 PUSCH 수신 + (옵션) RU 측정 보고</h3>
         <MessageSequence steps={ulFlow} stColors={stColors} seColors={seColors} title="UL 슬롯 흐름" client:load />
         <ol class="mt-3 list-decimal pl-5 text-sm space-y-1 text-ink-700 dark:text-ink-200 leading-relaxed">
           <li>O-DU가 UL 그랜트를 ST 1 C-plane으로 미리 RU에 통보.</li>
           <li>UE가 정해진 자원에 PUSCH를 송신 (DMRS 포함).</li>
-          <li>O-RU가 수신한 IQ를 U-plane으로 O-DU에 전달.</li>
-          <li>O-RU 또는 O-DU가 DMRS로 채널을 추정하고 <a href={`${base}section-types/6/`} class="text-brand-600 hover:underline">ST 6</a>로 채널 정보 공유.</li>
+          <li>O-RU가 수신한 IQ를 U-plane으로 O-DU에 전달, DU가 DMRS로 채널 추정.</li>
+          <li>DMRS-BF-EQ 시나리오에서는 RU가 등화 후 SINR을 <a href={`${base}section-types/9/`} class="text-brand-600 hover:underline">ST 9</a>로 보고. 단순 ueId 통보가 필요하면 DU→RU 방향으로 <a href={`${base}section-types/6/`} class="text-brand-600 hover:underline">ST 6</a> 채널 정보 메시지를 별도로 사용.</li>
         </ol>
       </div>
     </div>
@@ -88,9 +88,9 @@ const guidedScenario = [
     <p class="text-sm text-ink-600 dark:text-ink-300 max-w-3xl mb-4 leading-relaxed">
       RB 그리드는 <b>가로축이 시간(OFDM 심볼)</b>, <b>세로축이 주파수(PRB)</b>인 격자입니다.
       Section Type 메시지는 "이 직사각형 영역은 내 것"이라고 선언하는 식으로 동작합니다.
-      아래는 한 슬롯에 세 UE에게 PDSCH를 보내고, 슬롯 시작에 가드(ST 0), 마지막 심볼에 SRS(ST 10)를 두는 일반적 패턴.
+      아래는 한 슬롯에 세 UE에게 PDSCH를 보내고, 슬롯 시작과 마지막 심볼에 가드(ST 0)를 두는 일반적 패턴.
     </p>
-    <RbGrid sections={guidedScenario} caption="ST 0 가드 · ST 1 세 UE 동시 PDSCH · ST 10 SRS — 한 슬롯에 보통 여러 ST가 공존" client:load />
+    <RbGrid sections={guidedScenario} caption="ST 0 가드 · ST 1 세 UE 동시 PDSCH — 한 슬롯에 보통 여러 ST가 공존" client:load />
   </section>
 
   <section class="mb-12">
