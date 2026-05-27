@@ -1,46 +1,77 @@
 ---
+import SiteSearch from "./SiteSearch";
+import { buildSearchIndex } from "../lib/searchIndex";
 const base = import.meta.env.BASE_URL;
+const searchEntries = buildSearchIndex(base);
 const nav = [
-  { href: "", label: "홈" },
-  { href: "concepts", label: "개념·용어집" },
-  { href: "architecture", label: "아키텍처" },
-  { href: "section-types", label: "Section Types" },
-  { href: "extensions", label: "Extensions" },
-  { href: "fields", label: "Fields" },
-  { href: "simulator", label: "🎛 시뮬레이터" },
+  { href: "", label: "Home", code: "00" },
+  { href: "concepts", label: "Glossary", code: "01" },
+  { href: "architecture", label: "Architecture", code: "02" },
+  { href: "section-types", label: "Section Types", code: "03" },
+  { href: "extensions", label: "Extensions", code: "04" },
+  { href: "fields", label: "Fields", code: "05" },
+  { href: "simulator", label: "Simulator", code: "06" },
 ];
 const current = Astro.url.pathname.replace(base, "").replace(/^\//, "").split("/")[0] ?? "";
 ---
 
-<header class="sticky top-0 z-40 backdrop-blur bg-white/80 dark:bg-ink-900/80 border-b border-ink-200 dark:border-ink-700">
-  <div class="max-w-[1500px] mx-auto px-4 lg:px-8 h-14 flex items-center gap-6">
-    <a href={base} class="font-semibold tracking-tight text-lg">
-      <span class="text-brand-600">O-RAN</span> Spec Explorer
+<header class="sticky top-0 z-40 backdrop-blur-md bg-white/85 dark:bg-ink-900/85 border-b hairline">
+  <div class="max-w-[1500px] mx-auto px-4 lg:px-8 h-14 flex items-center gap-5">
+    <a href={base} class="group flex items-center gap-2.5 shrink-0" aria-label="O-RAN Spec Explorer 홈">
+      <span class="relative inline-flex items-center justify-center w-7 h-7">
+        <span class="absolute inset-0 rounded-full border hairline"></span>
+        <span class="absolute inset-[5px] rounded-full bg-brand-500 animate-pulseLine"></span>
+        <span class="absolute inset-[5px] rounded-full bg-brand-500/40 blur-[3px]"></span>
+      </span>
+      <span class="flex flex-col leading-none">
+        <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-500">O-RAN · WG4</span>
+        <span class="font-display text-[17px] tracking-tight -mt-0.5">
+          <span class="italic">Spec</span><span class="text-brand-600">.</span>Explorer
+        </span>
+      </span>
     </a>
-    <nav class="flex gap-1 text-sm">
-      {nav.map((n) => {
+
+    <nav class="hidden md:flex items-stretch ml-2 text-[13px]">
+      {nav.map((n, i) => {
         const href = n.href ? `${base}${n.href}/` : base;
         const active = current === n.href;
         return (
-          <a
-            href={href}
-            class={`px-3 py-1.5 rounded-md transition ${active ? "bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300" : "hover:bg-ink-100 dark:hover:bg-ink-800"}`}
-          >
-            {n.label}
-          </a>
+          <>
+            {i > 0 ? <span class="self-center w-px h-3 bg-current opacity-15 mx-0.5" aria-hidden="true"></span> : null}
+            <a
+              href={href}
+              class={`group relative flex items-baseline gap-1.5 px-2.5 py-1.5 rounded transition-colors ${active ? "text-brand-700 dark:text-brand-300" : "text-ink-600 dark:text-ink-300 hover:text-ink-900 dark:hover:text-white"}`}
+            >
+              <span class={`font-mono text-[9px] tabular ${active ? "text-brand-500" : "text-ink-400"}`}>{n.code}</span>
+              <span class="tracking-tight">{n.label}</span>
+              {active ? <span class="absolute left-2.5 right-2.5 -bottom-[15px] h-px bg-brand-500"></span> : null}
+            </a>
+          </>
         );
       })}
     </nav>
+
     <div class="ml-auto flex items-center gap-2">
+      <SiteSearch entries={searchEntries} client:idle />
       <button
         id="theme-toggle"
-        class="p-2 rounded-md hover:bg-ink-100 dark:hover:bg-ink-800 text-sm"
+        class="relative p-2 rounded-md hover:bg-ink-100 dark:hover:bg-ink-800 text-ink-500 hover:text-ink-900 dark:hover:text-white transition-colors"
         aria-label="Toggle theme"
       >
-        <span class="hidden dark:inline">☀</span>
-        <span class="dark:hidden">☾</span>
+        <svg class="hidden dark:block" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="dark:hidden" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
       </button>
     </div>
+  </div>
+
+  <div class="relative h-px overflow-hidden" aria-hidden="true">
+    <div class="absolute inset-0 bg-brand-500/0"></div>
+    <div class="absolute top-0 h-px w-1/3 scanline opacity-50 animate-carrier"></div>
   </div>
 </header>
 

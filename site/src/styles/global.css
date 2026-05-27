@@ -1,9 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Geist:wght@300..700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: light dark;
+  --grid-color: rgba(15, 19, 32, 0.06);
+  --hairline: rgba(15, 19, 32, 0.12);
+  --signal: #1e7ef0;
+  --amber: #d97706;
+}
+
+html.dark {
+  --grid-color: rgba(236, 239, 245, 0.05);
+  --hairline: rgba(236, 239, 245, 0.14);
+  --amber: #fbbf24;
 }
 
 html {
@@ -17,6 +29,7 @@ html.dark body {
 
 body {
   font-family:
+    "Geist",
     "Inter",
     ui-sans-serif,
     system-ui,
@@ -26,6 +39,104 @@ body {
     sans-serif;
   background-color: #f6f8fb;
   color: #0f1320;
+  font-feature-settings: "ss01", "cv11";
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Newsreader", ui-serif, Georgia, serif;
+    font-optical-sizing: auto;
+  }
+  .dot-grid {
+    background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: 0 0;
+  }
+  .dot-grid-fine {
+    background-image: radial-gradient(var(--grid-color) 0.8px, transparent 0.8px);
+    background-size: 14px 14px;
+  }
+  .hairline {
+    border-color: var(--hairline);
+  }
+  .scanline {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--signal) 50%,
+      transparent 100%
+    );
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .bracket-box {
+    position: relative;
+  }
+  .bracket-box::before,
+  .bracket-box::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--hairline);
+    pointer-events: none;
+  }
+  .bracket-box::before {
+    top: -1px;
+    left: -1px;
+    border-right: none;
+    border-bottom: none;
+  }
+  .bracket-box::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: none;
+    border-top: none;
+  }
+  .bracket-box-all {
+    position: relative;
+  }
+  .bracket-box-all > .corner {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--signal);
+    pointer-events: none;
+  }
+  .bracket-box-all > .corner.tl {
+    top: -1px;
+    left: -1px;
+    border-right: none;
+    border-bottom: none;
+  }
+  .bracket-box-all > .corner.tr {
+    top: -1px;
+    right: -1px;
+    border-left: none;
+    border-bottom: none;
+  }
+  .bracket-box-all > .corner.bl {
+    bottom: -1px;
+    left: -1px;
+    border-right: none;
+    border-top: none;
+  }
+  .bracket-box-all > .corner.br {
+    bottom: -1px;
+    right: -1px;
+    border-left: none;
+    border-top: none;
+  }
 }
 
 @layer components {
