@@ -157,7 +157,7 @@ export default function SiteSearch({ entries }: Props) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="group relative flex items-center gap-2 pl-2.5 pr-1.5 py-1.5 text-[12px] rounded-md border hairline bg-white/60 dark:bg-ink-900/40 text-ink-500 hover:text-ink-900 dark:hover:text-white hover:border-ink-300 dark:hover:border-ink-600 min-w-[200px] transition-colors"
+        className="group relative flex items-center gap-2 p-2 sm:pl-2.5 sm:pr-1.5 sm:py-1.5 text-[12px] rounded-md border hairline bg-white/60 dark:bg-ink-900/40 text-ink-500 hover:text-ink-900 dark:hover:text-white hover:border-ink-300 dark:hover:border-ink-600 sm:min-w-[180px] lg:min-w-[200px] transition-colors"
         aria-label="사이트 검색 열기 (Cmd K)"
       >
         <svg
@@ -171,11 +171,12 @@ export default function SiteSearch({ entries }: Props) {
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden="true"
+          className="shrink-0"
         >
           <circle cx="11" cy="11" r="7" />
           <path d="m20 20-3.5-3.5" />
         </svg>
-        <span className="flex-1 text-left font-mono tracking-tight">
+        <span className="hidden sm:block flex-1 text-left font-mono tracking-tight">
           <span className="opacity-60">spec://</span>search
         </span>
         <kbd className="hidden md:inline-flex items-center gap-0.5 text-[10px] font-mono px-1.5 py-0.5 rounded border hairline bg-ink-50 dark:bg-ink-800/60 text-ink-500">

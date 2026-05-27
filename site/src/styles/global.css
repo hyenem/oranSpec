@@ -22,6 +22,11 @@ html {
   scroll-behavior: smooth;
 }
 
+html,
+body {
+  overflow-x: clip;
+}
+
 html.dark body {
   background-color: #0f1320;
   color: #eceff5;

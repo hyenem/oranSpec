@@ -16,7 +16,7 @@ const current = Astro.url.pathname.replace(base, "").replace(/^\//, "").split("/
 ---
 
 <header class="sticky top-0 z-40 backdrop-blur-md bg-white/85 dark:bg-ink-900/85 border-b hairline">
-  <div class="max-w-[1500px] mx-auto px-4 lg:px-8 h-14 flex items-center gap-5">
+  <div class="max-w-[1800px] mx-auto px-4 lg:px-8 h-14 flex items-center gap-5">
     <a href={base} class="group flex items-center gap-2.5 shrink-0" aria-label="O-RAN Spec Explorer 홈">
       <span class="relative inline-flex items-center justify-center w-7 h-7">
         <span class="absolute inset-0 rounded-full border hairline"></span>
@@ -24,8 +24,8 @@ const current = Astro.url.pathname.replace(base, "").replace(/^\//, "").split("/
         <span class="absolute inset-[5px] rounded-full bg-brand-500/40 blur-[3px]"></span>
       </span>
       <span class="flex flex-col leading-none">
-        <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-500">O-RAN · WG4</span>
-        <span class="font-display text-[17px] tracking-tight -mt-0.5">
+        <span class="hidden sm:block font-mono text-[10px] uppercase tracking-[0.22em] text-ink-500">O-RAN · WG4</span>
+        <span class="font-display text-[17px] tracking-tight sm:-mt-0.5">
           <span class="italic">Spec</span><span class="text-brand-600">.</span>Explorer
         </span>
       </span>
