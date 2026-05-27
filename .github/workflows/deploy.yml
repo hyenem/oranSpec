@@ -30,34 +30,26 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
-
-      - name: Extract spec
-        run: |
-          mkdir -p ../extract
-          pandoc -f docx -t gfm --extract-media=../extract/media \
-            -o ../extract/spec.md \
-            "../O-RAN.WG4.TS.CUS.0-R005-v20.00.docx"
-          python3 scripts/extract.py
+      # docx is gitignored (36 MB binary). pandoc-extracted artifacts
+      # (extract/spec.md, extract/media, site/src/data/*.json) are
+      # committed, so the build does not regenerate them. To refresh
+      # after a spec update, run locally:
+      #   pandoc -f docx -t gfm --extract-media=extract/media \
+      #     -o extract/spec.md O-RAN.WG4.TS.CUS.*.docx
+      #   python3 site/scripts/extract.py
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
       - name: Build
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
           BASE_PATH: /${{ github.event.repository.name }}
         run: npm run build
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
